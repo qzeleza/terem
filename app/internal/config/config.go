@@ -20,7 +20,7 @@ func New() *Config {
 	return &Config{
 		Arch:    getEnv("ARCH", "arm"),
 		DevMode: getEnv("DEV_MODE", "develop"),
-		LogMode: getEnv("LOG_MODE", "debug"),
+		LogMode: getEnv("DEBUG", "true"),
 	}
 }
 
