@@ -1,6 +1,6 @@
 # Переменные
 APP_NAME=terem
-MAIN_PATH=cmd/$(APP_NAME)/main.go
+MAIN_PATH=main.go
 BUILD_DIR=../builder
 
 # Команды по умолчанию

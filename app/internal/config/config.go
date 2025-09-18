@@ -12,15 +12,15 @@ type Config struct {
 	// Режим работы (development, production)
 	DevMode string
 	// Режим логирования
-	LogMode string
+	DebugMode string
 }
 
 // New создаёт новую конфигурацию с значениями по умолчанию
 func New() *Config {
 	return &Config{
-		Arch:    getEnv("ARCH", "arm"),
-		DevMode: getEnv("DEV_MODE", "develop"),
-		LogMode: getEnv("DEBUG", "true"),
+		Arch:      getEnv("ARCH", "arm"),
+		DevMode:   getEnv("MODE", "develop"),
+		DebugMode: getEnv("DEBUG", "true"),
 	}
 }
 
