@@ -13,7 +13,13 @@ var debugCmd = &cobra.Command{
 			версии программного обеспечения, аппаратные характеристики и т.д.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		AppConfig.Debug = true
-		AppConfig.SetupLogger()
+		err := AppConfig.SetupLogger()
+		if err != nil {
+			err := AppConfig.Log.Fatal("Ошибка при настройке логгера:", err)
+			if err != nil {
+				AppConfig.Log.Error("Ошибка при выводе сообщения:", err)
+			}
+		}
 	},
 }
 

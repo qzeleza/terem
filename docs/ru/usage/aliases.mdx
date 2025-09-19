@@ -1,0 +1,249 @@
+---
+title: 'Синонимы'
+description: 'Использование командных сокращений и алиасов для быстрой работы'
+icon: 'keyboard'
+--->
+
+# Работа через синонимы
+
+Синонимы (алиасы) позволяют быстро выполнять часто используемые команды без запуска полного TUI интерфейса.
+
+## Встроенные синонимы
+
+```bash
+# Системная информация
+terem info
+terem sysinfo
+
+# Статус служб
+terem status
+
+# Быстрая диагностика
+terem check
+
+# Обновление пакетов
+terem update
+```
+
+## Создание собственных синонимов
+
+### Через конфигурационный файл
+
+```yaml
+# /etc/terem/aliases.yaml
+aliases:
+  - name: "backup"
+    command: "terem backup create --dest /mnt/usb/backups"
+    description: "Создать резервную копию"
+  
+  - name: "vpn-start"
+    command: "terem app wireguard start"
+    description: "Запустить WireGuard VPN"
+  
+  - name: "monitor"
+    command: "terem monitor --interval 5"
+    description: "Мониторинг в реальном времени"
+```
+
+### Через командную строку
+
+```bash
+# Добавить новый синоним
+terem alias add speedtest "terem run speedtest-cli"
+
+# Список всех синонимов
+terem alias list
+
+# Удалить синоним
+terem alias remove speedtest
+```
+
+## Примеры полезных синонимов
+
+### Мониторинг и диагностика
+
+```bash
+# Проверка памяти
+alias mem='terem info memory'
+
+# Мониторинг трафика
+alias traffic='terem monitor network'
+
+# Проверка температуры
+alias temp='terem info temperature'
+
+# Логи в реальном времени
+alias logs='terem log tail -f'
+```
+
+### Управление сетью
+
+```bash
+# Перезагрузка сети
+alias netrestart='terem network restart'
+
+# Показать подключенные устройства
+alias devices='terem network clients'
+
+# Проверка скорости интернета
+alias speed='terem network speedtest'
+```
+
+### Безопасность
+
+```bash
+# Проверка безопасности
+alias security='terem security check'
+
+# Обновление списков блокировки
+alias blockupdate='terem security blocklist update'
+
+# Статус VPN
+alias vpnstatus='terem app wireguard status'
+```
+
+## Интеграция с shell
+
+### Bash/Zsh
+
+```bash
+# Добавьте в ~/.bashrc или ~/.zshrc
+source /etc/terem/shell-integration.sh
+
+# Теперь доступны короткие команды:
+t info      # вместо terem info
+t update    # вместо terem update
+t check     # вместо terem check
+```
+
+### Автодополнение
+
+```bash
+# Установка автодополнения для bash
+terem completion bash > /etc/bash_completion.d/terem
+
+# Для zsh
+terem completion zsh > "${fpath[1]}/_terem"
+
+# Для fish
+terem completion fish > ~/.config/fish/completions/terem.fish
+```
+
+## Цепочки команд
+
+### Последовательное выполнение
+
+```bash
+# Обновить систему и проверить статус
+terem chain "update" "check" "info"
+
+# С условной логикой
+terem update && terem restart || terem rollback
+```
+
+### Параллельное выполнение
+
+```bash
+# Запустить несколько проверок одновременно
+terem parallel "check network" "check security" "check updates"
+```
+
+## Скрипты и автоматизация
+
+### Создание скрипта
+
+```bash
+#!/bin/bash
+# maintenance.sh - Скрипт обслуживания
+
+echo "Начинаем обслуживание системы..."
+
+# Проверка системы
+terem check
+
+# Обновление пакетов
+terem update
+
+# Очистка кэша
+terem cache clear
+
+# Создание резервной копии
+terem backup create
+
+echo "Обслуживание завершено!"
+```
+
+### Планировщик задач
+
+```bash
+# Добавить в crontab
+# Ежедневная проверка в 3:00
+0 3 * * * /usr/local/bin/terem check --quiet
+
+# Еженедельное обновление по воскресеньям
+0 2 * * 0 /usr/local/bin/terem update --auto
+
+# Ежемесячная очистка логов
+0 0 1 * * /usr/local/bin/terem log rotate
+```
+
+## Переменные окружения
+
+```bash
+# Установка переменных для Терем
+export TEREM_CONFIG=/etc/terem/config.yaml
+export TEREM_LOG_LEVEL=debug
+export TEREM_LANG=ru
+
+# Использование в командах
+TEREM_QUIET=1 terem update  # Тихий режим
+TEREM_COLOR=0 terem info    # Без цветов
+```
+
+## Полезные комбинации
+
+### Мониторинг в реальном времени
+
+```bash
+# Обновление информации каждые 5 секунд
+watch -n 5 terem info
+
+# Мониторинг логов
+tail -f /var/log/terem.log | grep ERROR
+
+# Статистика использования
+terem stats --format json | jq '.memory'
+```
+
+### Отладка и диагностика
+
+```bash
+# Подробный вывод
+terem --debug info
+
+# Трассировка выполнения
+terem --trace network check
+
+# Сухой прогон (без изменений)
+terem --dry-run update
+```
+
+## Экспорт и импорт
+
+```bash
+# Экспорт конфигурации
+terem config export > terem-config.json
+
+# Импорт конфигурации
+terem config import < terem-config.json
+
+# Экспорт синонимов
+terem alias export > aliases.txt
+
+# Импорт синонимов
+terem alias import < aliases.txt
+```
+
+<Note>
+  Синонимы значительно ускоряют работу с Терем. Создайте свой набор команд для часто выполняемых задач!
+</Note>

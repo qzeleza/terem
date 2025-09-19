@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/qzeleza/terem/cmd/terem"
+	"github.com/qzeleza/terem/cmd/tui"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +15,7 @@ import (
 
 // // Глобальные переменные для флагов
 // // Будет передан из main
-var AppConfig *terem.AppConfig
+var AppConfig *tui.AppConfig
 
 var rootCmd = &cobra.Command{
 	Use:   "terem",
@@ -31,11 +31,13 @@ var rootCmd = &cobra.Command{
 		// Запускаем интерактивный режим, в случае если запущена без аргументов
 		if len(args) == 0 {
 
+			// Запускаем бесконечный цикл
+			// для выбора режима работы
 			for {
-				AppConfig.SelectMode()
+				AppConfig.SelectMainMenu()
 				switch AppConfig.Mode {
 				case "Приложения":
-					AppConfig.SelectCategory()
+					AppConfig.SelectCategoryLoop()
 				case "Настройки":
 					AppConfig.SelectSettings()
 				case "Выход":
@@ -48,7 +50,7 @@ var rootCmd = &cobra.Command{
 }
 
 // Execute запускает командную строку
-func Execute(ac *terem.AppConfig) {
+func Execute(ac *tui.AppConfig) {
 	ac.Log.Info("Запуск командной строки")
 	AppConfig = ac
 	if err := rootCmd.Execute(); err != nil {

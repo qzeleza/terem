@@ -38,6 +38,9 @@ make deps
 # Clean build artifacts
 make clean
 
+# Clean cache
+make cache
+
 # Install to GOPATH
 make install
 ```

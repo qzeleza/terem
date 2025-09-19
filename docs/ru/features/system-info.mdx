@@ -1,0 +1,165 @@
+---
+title: 'Система'
+description: 'Мониторинг и отображение информации о роутере'
+icon: 'circle-info'
+---
+
+# Системная информация
+
+Терем предоставляет детальную информацию о состоянии вашего роутера в реальном времени.
+
+## Отображаемая информация
+
+### Аппаратная информация
+- **Модель роутера** - точная модель устройства
+- **Процессор** - тип и частота CPU
+- **Архитектура** - ARM, MIPS, x86
+- **Память** - общий объем и использование RAM
+- **Хранилище** - информация о накопителях
+
+### Сетевая информация
+- **IP-адреса** - локальные и внешние
+- **MAC-адреса** - физические адреса интерфейсов
+- **Шлюз** - адрес маршрутизатора по умолчанию
+- **DNS-серверы** - настроенные серверы имен
+- **Интерфейсы** - список сетевых интерфейсов
+
+### Системная информация
+- **Версия ОС** - OpenWrt/Entware версия
+- **Ядро Linux** - версия ядра
+- **Время работы** - uptime системы
+- **Загрузка системы** - средние значения нагрузки
+- **Температура** - если доступны датчики
+
+## Команды CLI
+
+```bash
+# Полная информация о системе
+terem info
+
+# Только информация о памяти
+terem info memory
+
+# Только сетевая информация
+terem info network
+
+# Информация о процессоре
+terem info cpu
+
+# Температура системы
+terem info temp
+```
+
+## Форматы вывода
+
+<Tabs>
+  <Tab title="Текстовый">
+    ```bash
+    terem info --format text
+    
+    Системная информация:
+    =====================
+    Модель: ASUS RT-AC86U
+    Процессор: ARMv8 Processor rev 4
+    Архитектура: aarch64
+    Память: 256/512 MB (50%)
+    Время работы: 5д 12ч 34м
+    ```
+  </Tab>
+  <Tab title="JSON">
+    ```bash
+    terem info --format json
+    
+    {
+      "model": "ASUS RT-AC86U",
+      "cpu": "ARMv8 Processor rev 4",
+      "arch": "aarch64",
+      "memory": {
+        "total": 524288,
+        "used": 262144,
+        "free": 262144
+      },
+      "uptime": 478440
+    }
+    ```
+  </Tab>
+  <Tab title="YAML">
+    ```bash
+    terem info --format yaml
+    
+    model: ASUS RT-AC86U
+    cpu: ARMv8 Processor rev 4
+    arch: aarch64
+    memory:
+      total: 524288
+      used: 262144
+      free: 262144
+    uptime: 478440
+    ```
+  </Tab>
+</Tabs>
+
+## Мониторинг в реальном времени
+
+```bash
+# Обновление каждые 5 секунд
+terem monitor --interval 5
+
+# Мониторинг только памяти
+terem monitor memory
+
+# Мониторинг с записью в файл
+terem monitor --output /tmp/monitor.log
+```
+
+## Интеграция с другими инструментами
+
+### Grafana
+```bash
+# Экспорт метрик для Grafana
+terem metrics export --format prometheus
+```
+
+### Zabbix
+```bash
+# Отправка данных в Zabbix
+terem metrics send --zabbix-server 192.168.1.100
+```
+
+### SNMP
+```bash
+# Включение SNMP агента
+terem snmp enable --community public
+```
+
+## Уведомления и алерты
+
+```yaml
+# /etc/terem/alerts.yaml
+alerts:
+  - name: "high_memory"
+    condition: "memory.usage > 90"
+    action: "email admin@example.com"
+  
+  - name: "high_temp"
+    condition: "temperature > 80"
+    action: "telegram @admin"
+  
+  - name: "long_uptime"
+    condition: "uptime > 30d"
+    action: "log warning"
+```
+
+## Автоматизация сбора данных
+
+```bash
+# Cron задача для сбора статистики
+*/5 * * * * terem info --format json >> /var/log/terem-stats.jsonl
+
+# Ротация логов статистики
+0 0 * * * terem stats rotate --keep 30
+```
+
+<Note>
+  Системная информация автоматически кэшируется на 60 секунд для снижения нагрузки на систему.
+</Note>

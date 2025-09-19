@@ -7,7 +7,7 @@ import (
 	"runtime/debug"
 
 	"github.com/qzeleza/terem/cmd/args"
-	"github.com/qzeleza/terem/cmd/terem"
+	"github.com/qzeleza/terem/cmd/tui"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	}()
 
 	// 2. Инициализируем конфигурацию приложени
-	ac, err := terem.NewSetup("terem", "1.0.0")
+	ac, err := tui.NewSetup("terem", "1.0.0")
 	if err != nil {
 		fmt.Printf("Ошибка создания конфигурации: %v\n", err)
 		os.Exit(1)

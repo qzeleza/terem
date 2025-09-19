@@ -1,0 +1,310 @@
+---
+title: 'Установка'
+description: 'Пошаговая инструкция по установке Терем на роутер'
+icon: 'download'
+---
+
+# Установка Терем
+
+Установка Терем может быть выполнена несколькими способами в зависимости от ваших предпочтений и конфигурации системы.
+
+## Быстрая установка
+
+<Tabs>
+  <Tab title="Автоматическая">
+    ```bash
+    # Загрузка и запуск установочного скрипта
+    curl -sSL https://terem.zeleza.com/install.sh | sh
+    ```
+    
+    <Info>
+      Скрипт автоматически определит архитектуру вашей системы и установит подходящую версию.
+    </Info>
+  </Tab>
+  <Tab title="Через wget">
+    ```bash
+    # Альтернативный вариант через wget
+    wget -qO- https://terem.zeleza.com/install.sh | sh
+    ```
+  </Tab>
+</Tabs>
+
+## Установка из репозитория
+
+### Добавление репозитория
+```bash
+# Добавляем репозиторий Терем
+echo "src/gz terem https://repo.terem.zeleza.com/$(uname -m)" >> /etc/opkg/customfeeds.conf
+
+# Обновляем список пакетов
+opkg update
+```
+
+### Установка пакета
+```bash
+# Устанавливаем Терем
+opkg install terem
+
+# Проверяем установку
+terem version
+```
+
+## Ручная установка
+
+<Steps>
+  <Step title="Определите архитектуру">
+    ```bash
+    # Узнаем архитектуру системы
+    uname -m
+    ```
+    
+    Возможные варианты:
+    - `aarch64` - ARM 64-bit
+    - `armv7l` - ARM 32-bit
+    - `mips` - MIPS
+    - `x86_64` - Intel/AMD 64-bit
+  </Step>
+  
+  <Step title="Скачайте бинарный файл">
+    <CodeGroup>
+    ```bash ARM64
+    wget https://github.com/qzeleza/terem/releases/latest/download/terem-linux-arm64.tar.gz
+    ```
+    
+    ```bash ARM32
+    wget https://github.com/qzeleza/terem/releases/latest/download/terem-linux-arm.tar.gz
+    ```
+    
+    ```bash MIPS
+    wget https://github.com/qzeleza/terem/releases/latest/download/terem-linux-mips.tar.gz
+    ```
+    
+    ```bash x86_64
+    wget https://github.com/qzeleza/terem/releases/latest/download/terem-linux-amd64.tar.gz
+    ```
+    </CodeGroup>
+  </Step>
+  
+  <Step title="Распакуйте архив">
+    ```bash
+    # Распаковываем архив
+    tar -xzf terem-linux-*.tar.gz
+    
+    # Переходим в директорию
+    cd terem
+    ```
+  </Step>
+  
+  <Step title="Установите файлы">
+    ```bash
+    # Копируем бинарный файл
+    cp terem /usr/local/bin/
+    chmod +x /usr/local/bin/terem
+    
+    # Копируем конфигурационные файлы
+    mkdir -p /etc/terem
+    cp config/* /etc/terem/
+    
+    # Создаем директорию для логов
+    mkdir -p /var/log/terem
+    ```
+  </Step>
+  
+  <Step title="Проверьте установку">
+    ```bash
+    # Проверяем версию
+    terem version
+    
+    # Проверяем доступные команды
+    terem help
+    ```
+  </Step>
+</Steps>
+
+## Установка из исходного кода
+
+### Предварительные требования
+- Go 1.25 или выше
+- Git
+- Make
+
+### Процесс сборки
+
+<Steps>
+  <Step title="Клонируйте репозиторий">
+    ```bash
+    git clone https://github.com/qzeleza/terem.git
+    cd terem/app
+    ```
+  </Step>
+  
+  <Step title="Установите зависимости">
+    ```bash
+    go mod download
+    go mod verify
+    ```
+  </Step>
+  
+  <Step title="Соберите приложение">
+    ```bash
+    # Сборка для текущей платформы
+    make build
+    
+    # Или для конкретной платформы
+    GOOS=linux GOARCH=arm64 make build
+    ```
+  </Step>
+  
+  <Step title="Установите">
+    ```bash
+    make install
+    ```
+  </Step>
+</Steps>
+
+## Установка через Docker
+
+<Warning>
+  Docker может быть недоступен на некоторых роутерах из-за ограничений ресурсов.
+</Warning>
+
+```bash
+# Запуск в контейнере
+docker run -it --rm \
+  --network host \
+  --privileged \
+  -v /etc/terem:/etc/terem \
+  qzeleza/terem:latest
+```
+
+## Конфигурация после установки
+
+### Создание конфигурационного файла
+```bash
+# Генерируем базовую конфигурацию
+terem init
+
+# Или копируем пример
+cp /etc/terem/config.example.yaml /etc/terem/config.yaml
+```
+
+### Настройка прав доступа
+```bash
+# Устанавливаем правильные права
+chmod 600 /etc/terem/config.yaml
+chown root:root /etc/terem/*
+```
+
+### Добавление в автозагрузку
+```bash
+# Создаем init.d скрипт
+cat > /etc/init.d/terem << 'EOF'
+#!/bin/sh /etc/rc.common
+
+START=99
+STOP=10
+
+start() {
+    echo "Starting Terem..."
+    /usr/local/bin/terem daemon &
+}
+
+stop() {
+    echo "Stopping Terem..."
+    killall terem
+}
+EOF
+
+# Делаем исполняемым
+chmod +x /etc/init.d/terem
+
+# Включаем автозапуск
+/etc/init.d/terem enable
+```
+
+## Обновление
+
+### Автоматическое обновление
+```bash
+# Проверка обновлений
+terem update check
+
+# Установка обновления
+terem update install
+```
+
+### Ручное обновление
+```bash
+# Через пакетный менеджер
+opkg update && opkg upgrade terem
+
+# Или скачиваем новую версию
+wget https://github.com/qzeleza/terem/releases/latest/download/terem-linux-$(uname -m).tar.gz
+```
+
+## Удаление
+
+### Полное удаление
+```bash
+# Остановка службы
+/etc/init.d/terem stop
+/etc/init.d/terem disable
+
+# Удаление файлов
+rm -rf /usr/local/bin/terem
+rm -rf /etc/terem
+rm -rf /var/log/terem
+rm -f /etc/init.d/terem
+```
+
+### Сохранение конфигурации
+```bash
+# Создаем резервную копию перед удалением
+tar -czf terem-backup.tar.gz /etc/terem
+
+# Удаляем только бинарный файл
+rm /usr/local/bin/terem
+```
+
+## Решение проблем установки
+
+<AccordionGroup>
+  <Accordion title="Ошибка: недостаточно места">
+    ```bash
+    # Проверьте свободное место
+    df -h
+    
+    # Очистите временные файлы
+    rm -rf /tmp/*
+    
+    # Установите на внешний накопитель
+    ln -s /mnt/usb/terem /usr/local/bin/terem
+    ```
+  </Accordion>
+  
+  <Accordion title="Ошибка: несовместимая архитектура">
+    ```bash
+    # Проверьте архитектуру
+    file /usr/local/bin/terem
+    
+    # Скачайте правильную версию
+    uname -m  # узнайте архитектуру
+    # Скачайте соответствующую версию
+    ```
+  </Accordion>
+  
+  <Accordion title="Ошибка: отсутствуют зависимости">
+    ```bash
+    # Установите базовые зависимости
+    opkg update
+    opkg install bash coreutils-base
+    
+    # Проверьте зависимости
+    ldd /usr/local/bin/terem
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  После успешной установки перейдите к [первоначальной настройке](/ru/installation/initial-setup).
+</Note>

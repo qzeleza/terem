@@ -1,138 +1,166 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "willow",
+  "$schema": "https://mintlify.com/schema.json",
+  "theme": "almond",
   "name": "Терем",
+  "description": "Утилита для управления роутерами с entware/openwrt",
+  "logo": {
+    "dark": "/favicon.svg",
+    "light": "/favicon.svg",
+    "url": "/"
+  },
+  "favicon": "/favicon.svg",
+  "styling": {
+    "eyebrows": "section",
+    "codeblocks": "system"
+  },
   "colors": {
     "primary": "#16A34A",
-    "light": "#07C983",
+    "light": "#22C55E",
     "dark": "#15803D"
-  },
-
-  "favicon": "/favicon.svg",
-  "navigation": {
-    "languages": [
-      {
-        "language": "en",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": ["en/overview", "en/quickstart", "en/development"]
-          }
-        ]
-      },
-      {
-        "language": "es",
-        "groups": [
-          {
-            "group": "Getting started", 
-            "pages": ["es/overview", "es/quickstart", "es/development"]
-          }
-        ]
-      }
-    ],
-    "tabs": [
-      {
-        "tab": "Руководства",
-        "groups": [
-          {
-            "group": "Начало",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Настройки",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Создание страниц",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "ИИ инструменты",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
   },
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "GitHub",
+        "href": "https://github.com/qzeleza/terem"
+      },
+      {
+        "label": "Telegram",
+        "href": "https://t.me/terem_router"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Скачать",
+      "href": "https://github.com/qzeleza/terem/releases"
     }
   },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+  "navigation": {
+    "languages": [
+      {
+        "language": "ru",
+        "groups": [
+          {
+            "group": "О пакете",
+            "pages": [
+              "ru/about/introduction",
+              "ru/about/advantages",
+              "ru/about/requirements",
+              "ru/about/dependencies"
+            ]
+          },
+          {
+            "group": "Установка",
+            "pages": [
+              "ru/installation/install",
+              "ru/installation/initial-setup",
+              "ru/installation/launch"
+            ]
+          },
+          {
+            "group": "Использование",
+            "pages": [
+              "ru/usage/tui-interface",
+              "ru/usage/aliases"
+            ]
+          },
+          {
+            "group": "Функционал",
+            "pages": [
+              "ru/features/system-info",
+              "ru/features/security",
+              "ru/features/network-utils",
+              "ru/features/other-utils",
+              "ru/features/settings"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "en",
+        "groups": [
+          {
+            "group": "About the package",
+            "pages": [
+              "en/about/introduction",
+              "en/about/advantages",
+              "en/about/requirements",
+              "en/about/dependencies"
+            ]
+          },
+          {
+            "group": "Installation package",
+            "pages": [
+              "en/installation/install",
+              "en/installation/initial-setup",
+              "en/installation/launch"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "en/usage/tui-interface",
+              "en/usage/aliases"
+            ]
+          },
+          {
+            "group": "Functionality",
+            "pages": [
+              "en/features/system-info",
+              "en/features/security",
+              "en/features/network-utils",
+              "en/features/other-utils",
+              "en/features/settings"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "tr",
+        "groups": [
+          {
+            "group": "Hakkında",
+            "pages": [
+              "tr/about/introduction",
+              "tr/about/advantages",
+              "tr/about/requirements",
+              "tr/about/dependencies"
+            ]
+          },
+          {
+            "group": "Paket Kurulumu",
+            "pages": [
+              "tr/installation/install",
+              "tr/installation/initial-setup",
+              "tr/installation/launch"
+            ]
+          },
+          {
+            "group": "Kullanım",
+            "pages": [
+              "tr/usage/tui-interface",
+              "tr/usage/aliases"
+            ]
+          },
+          {
+            "group": "Fonksiyonluk",
+            "pages": [
+              "tr/features/system-info",
+              "tr/features/security",
+              "tr/features/network-utils",
+              "tr/features/other-utils",
+              "tr/features/settings"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/qzeleza/terem",
+      "telegram": "https://t.me/terem_router"
     }
   }
 }
+

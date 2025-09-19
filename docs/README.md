@@ -41,3 +41,24 @@ Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/sett
 
 ### Resources
 - [Mintlify documentation](https://mintlify.com/docs)
+
+
+### Структура документации
+
+1. О пакете
+    - Описание
+    - Преимущества
+    - Требования
+    - Зависимости
+2. Установка пакета
+    - Установка 
+    - Первоначальная настройка
+    - Запуск
+3. Использование
+    - Работа через TUI
+    - Работа через синонимы
+
+
+### Картинка домика 
+
+Используем для иллюстрации согласно https://www.flaticon.com/legal
