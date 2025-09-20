@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "theme": "almond",
+  "theme": "willow",
   "name": "Терем",
   "description": "Утилита для управления роутерами с entware/openwrt",
   "logo": {
@@ -39,117 +39,102 @@
     "languages": [
       {
         "language": "ru",
-        "groups": [
+        "tabs": [
           {
-            "group": "О пакете",
-            "pages": [
-              "ru/about/introduction",
-              "ru/about/advantages",
-              "ru/about/requirements",
-              "ru/about/dependencies"
+            "tab": "Документация",
+            "icon": "book",
+            "groups": [
+              {
+                "group": "О пакете",
+                "pages": [
+                  "ru/about/introduction",
+                  "ru/about/advantages",
+                  "ru/about/requirements",
+                  "ru/about/dependencies"
+                ]
+              },
+              {
+                "group": "Установка пакета",
+                "pages": [
+                  "ru/installation/install",
+                  "ru/installation/initial-setup",
+                  "ru/installation/launch"
+                ]
+              },
+              {
+                "group": "Использование",
+                "pages": [
+                  "ru/usage/tui-interface",
+                  "ru/usage/aliases"
+                ]
+              },
+              {
+                "group": "Функционал",
+                "pages": [
+                  "ru/features/system-info"
+                ]
+              },
+              {
+                "group": "API",
+                "pages": [
+                  "api-reference/introduction"
+                ]
+              }
             ]
           },
           {
-            "group": "Установка",
+            "tab": "Журнал версий",
+            "icon": "clock-rotate-left",
             "pages": [
-              "ru/installation/install",
-              "ru/installation/initial-setup",
-              "ru/installation/launch"
-            ]
-          },
-          {
-            "group": "Использование",
-            "pages": [
-              "ru/usage/tui-interface",
-              "ru/usage/aliases"
-            ]
-          },
-          {
-            "group": "Функционал",
-            "pages": [
-              "ru/features/system-info",
-              "ru/features/security",
-              "ru/features/network-utils",
-              "ru/features/other-utils",
-              "ru/features/settings"
+              "ru/changelog"
             ]
           }
         ]
       },
       {
         "language": "en",
-        "groups": [
+        "tabs": [
           {
-            "group": "About the package",
-            "pages": [
-              "en/about/introduction",
-              "en/about/advantages",
-              "en/about/requirements",
-              "en/about/dependencies"
+            "tab": "Documentation",
+            "icon": "book",
+            "groups": [
+              {
+                "group": "About",
+                "pages": [
+                  "en/about/introduction"
+                ]
+              }
             ]
           },
           {
-            "group": "Installation package",
+            "tab": "Changelog",
+            "icon": "clock-rotate-left",
             "pages": [
-              "en/installation/install",
-              "en/installation/initial-setup",
-              "en/installation/launch"
-            ]
-          },
-          {
-            "group": "Usage",
-            "pages": [
-              "en/usage/tui-interface",
-              "en/usage/aliases"
-            ]
-          },
-          {
-            "group": "Functionality",
-            "pages": [
-              "en/features/system-info",
-              "en/features/security",
-              "en/features/network-utils",
-              "en/features/other-utils",
-              "en/features/settings"
+              "en/changelog"
             ]
           }
         ]
       },
       {
         "language": "tr",
-        "groups": [
+        "tabs": [
           {
-            "group": "Hakkında",
-            "pages": [
-              "tr/about/introduction",
-              "tr/about/advantages",
-              "tr/about/requirements",
-              "tr/about/dependencies"
+            "tab": "Dokümantasyon",
+            "icon": "book",
+            "groups": [
+              {
+                "group": "Hakkında",
+                "pages": [
+                  "tr/about/introduction"
+                ]
+              }
             ]
           },
           {
-            "group": "Paket Kurulumu",
+            "tab": "Sürüm Geçmişi",
+            "icon": "clock-rotate-left",
             "pages": [
-              "tr/installation/install",
-              "tr/installation/initial-setup",
-              "tr/installation/launch"
-            ]
-          },
-          {
-            "group": "Kullanım",
-            "pages": [
-              "tr/usage/tui-interface",
-              "tr/usage/aliases"
-            ]
-          },
-          {
-            "group": "Fonksiyonluk",
-            "pages": [
-              "tr/features/system-info",
-              "tr/features/security",
-              "tr/features/network-utils",
-              "tr/features/other-utils",
-              "tr/features/settings"
+              "tr/changelog"
             ]
           }
         ]

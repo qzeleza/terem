@@ -1,64 +1,75 @@
-# Mintlify Starter Kit
+# Стартовый набор Mintlify
 
-Use the starter kit to get your docs deployed and ready to customize.
+Этот репозиторий содержит шаблон, который помогает быстро развернуть документацию и начать её доработку под проект.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+Нажмите зелёную кнопку **Use this template** в верхней части репозитория, чтобы скопировать стартовый комплект Mintlify. В него уже входят примеры:
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+- обзорных и пошаговых страниц;
+- структуры навигации;
+- пользовательских настроек оформления;
+- API-справочника;
+- популярных компонентов из библиотеки Mintlify.
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+**[Полное руководство по быстрому старту](https://starter.mintlify.com/quickstart)**
 
-## Development
+## Разработка документации
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+Установите [Mintlify CLI](https://www.npmjs.com/package/mint), чтобы локально просматривать изменения в документации. Для установки выполните команду:
 
 ```
 npm i -g mint
 ```
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+В корне документации (каталог с `docs.json`) запустите локальный сервер предпросмотра:
 
 ```
 mint dev
 ```
 
-View your local preview at `http://localhost:3000`.
+После запуска приложение будет доступно по адресу `http://localhost:3000`.
 
-## Publishing changes
+## Публикация изменений
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+Подключите GitHub‑приложение Mintlify через [личный кабинет](https://dashboard.mintlify.com/settings/organization/github-app), чтобы изменения из репозитория автоматически развёртывались в продакшн. После пуша в основную ветку сайт обновится без дополнительных действий.
 
-## Need help?
+## Поддержка и справка
 
-### Troubleshooting
+### Устранение неполадок
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+- Среда разработки не поднимается — выполните `mint update`, чтобы установить свежую версию CLI.
+- При открытии страницы появляется 404 — убедитесь, что команда запускается из каталога с валидным `docs.json`.
 
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+### Полезные ресурсы
 
+- [Документация Mintlify](https://mintlify.com/docs)
 
-### Структура документации
+## Темы оформления
 
-1. О пакете
-    - Описание
-    - Преимущества
-    - Требования
-    - Зависимости
-2. Установка пакета
-    - Установка 
-    - Первоначальная настройка
-    - Запуск
-3. Использование
-    - Работа через TUI
-    - Работа через синонимы
+В проект можно подключить заранее подготовленные темы:
 
+- mint
+- maple
+- palm
+- willow
+- linden
+- almond
+- aspen
 
-### Картинка домика 
+## Предлагаемая структура контента
 
-Используем для иллюстрации согласно https://www.flaticon.com/legal
+1. **О пакете**
+   - описание;
+   - преимущества;
+   - требования;
+   - зависимости.
+2. **Установка**
+   - процесс установки;
+   - первичная настройка;
+   - запуск.
+3. **Использование**
+   - работа через TUI;
+   - работа через алиасы/CLI.
+
+## Иллюстрации
+
+Для графики (например, изображения домика) используйте материалы с [flaticon.com](https://www.flaticon.com/legal) и соблюдайте условия их лицензии.
