@@ -3,16 +3,25 @@ package tui
 import (
 	"log"
 
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/qzeleza/termos"
 )
+
+var mainMenuKeys = []string{
+	ModeApps,
+	ModeSettings,
+	ModeExit,
+}
 
 // SelectMainMenu выбирает режим работы приложения
 func (ac *AppConfig) SelectMainMenu() {
 
 	// Устанавливаем язык для Термоса (TUI)
-	termos.SetDefaultLanguage("en")
+	termos.SetDefaultLanguage(i18n.Language())
+	ac.AppTitle = i18n.T("app.title")
+
 	// Создаем основную очередь для выбора приложения
-	setupQueue := termos.NewQueue("Библиотека приложений для роутера").
+	setupQueue := termos.NewQueue(i18n.T("menu.main.queue.title")).
 		WithAppName(ac.AppTitle).
 		WithSummary(false).
 		WithTitleColor(ac.AppTitleColor, true).
@@ -22,23 +31,20 @@ func (ac *AppConfig) SelectMainMenu() {
 	ac.SysInfo(setupQueue)
 
 	// Создаем список для выбора
-	menuList := []string{
-		"Приложения",
-		"Настройки",
-		"Выход",
-	}
+	menuLabels := labelsFor(mainMenuKeys)
 
 	// Создаем задачу для выбора пункта меню с запоминанием последней позиции
-	menuTask := termos.NewSingleSelectTask("Выбор режима работы", menuList).WithDefaultItem(ac.LastMainMenuIndex)
+	menuTask := termos.NewSingleSelectTask(i18n.T("menu.main.task.title"), menuLabels).WithDefaultItem(ac.LastMainMenuIndex)
 	setupQueue.AddTasks(menuTask)
 
 	// Запускаем выбор режима
 	if err := setupQueue.Run(); err != nil {
-		log.Fatal("Ошибка при выборе режима работы:", err)
+		log.Fatal(i18n.T("menu.main.error"), err)
 	}
 	// Сохраняем выбранный индекс и устанавливаем режим
-	ac.LastMainMenuIndex = menuTask.GetSelectedIndex()
-	ac.Mode = menuList[menuTask.GetSelectedIndex()]
+	selected := menuTask.GetSelectedIndex()
+	ac.LastMainMenuIndex = selected
+	ac.Mode = mainMenuKeys[selected]
 }
 
 //

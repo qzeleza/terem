@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/qzeleza/terem/internal/i18n"
 )
 
 // ExecuteCommand выполняет команду локально или удалённо
@@ -21,7 +23,7 @@ func ExecuteCommand(cmd string) (string, error) {
 
 	err := command.Run()
 	if err != nil {
-		return "", fmt.Errorf("ошибка выполнения команды '%s': %v", cmd, err)
+		return "", fmt.Errorf(i18n.T("utils.error.command"), cmd, err)
 	}
 
 	return strings.TrimSpace(out.String()), nil
@@ -31,7 +33,7 @@ func ExecuteCommand(cmd string) (string, error) {
 func ReadFile(path string) (string, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return "", fmt.Errorf("ошибка чтения файла %s: %v", path, err)
+		return "", fmt.Errorf(i18n.T("utils.error.read_file"), path, err)
 	}
 	return strings.TrimSpace(string(data)), nil
 }
@@ -48,11 +50,11 @@ func FormatUptime(bootTime time.Time) string {
 
 	// Форматируем строку
 	if days > 0 {
-		return fmt.Sprintf("%d дн. %d ч. %d мин.", days, hours, minutes)
+		return fmt.Sprintf(i18n.T("utils.duration.days_hours_minutes"), days, hours, minutes)
 	} else if hours > 0 {
-		return fmt.Sprintf("%d ч. %d мин.", hours, minutes)
+		return fmt.Sprintf(i18n.T("utils.duration.hours_minutes"), hours, minutes)
 	} else {
-		return fmt.Sprintf("%d мин.", minutes)
+		return fmt.Sprintf(i18n.T("utils.duration.minutes"), minutes)
 	}
 }
 
@@ -80,4 +82,33 @@ func GetEnvBool(key string, defaultValue bool) bool {
 	}
 
 	return parsed
+}
+
+// PadRight дополняет строку пробелами справа до указанной ширины
+//
+// Параметры:
+//   - s: исходная строка
+//   - width: желаемая ширина строки
+//
+// Возвращает:
+//   - строка, дополненная пробелами до указанной ширины
+//   - если исходная строка длиннее или равна width, возвращается исходная строка
+func PadRight(s string, width int) string {
+	// Если строка уже нужной длины или длиннее, возвращаем как есть
+	if len(s) >= width {
+		return s
+	}
+
+	// Создаем слайс байт нужной длины
+	result := make([]byte, width)
+
+	// Копируем исходную строку
+	copy(result, s)
+
+	// Заполняем оставшееся место пробелами
+	for i := len(s); i < width; i++ {
+		result[i] = ' '
+	}
+
+	return string(result)
 }

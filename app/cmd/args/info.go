@@ -3,24 +3,30 @@ package args
 import (
 	"fmt"
 
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/spf13/cobra"
 )
 
 // infoCmd команда для отображения информации о системе
 var infoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "Информация о системе",
-	Long: `Отображает информацию о системе в полном объеме:
-версии программного обеспечения, аппаратные характеристики и т.д.`,
+	Short: i18n.T("cli.info.short"),
+	Long:  i18n.T("cli.info.long"),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("=== Информация о системе ===")
-		fmt.Println("terem v1.0.0")
-		fmt.Println("Go версия:", "1.25.0+")
-		fmt.Println("Архитектура: ARM (по умолчанию для роутеров)")
+		fmt.Println(i18n.T("cli.info.header"))
+		fmt.Println(i18n.T("cli.info.version"))
+		fmt.Println(fmt.Sprintf(i18n.T("cli.info.go_version"), "1.25.0+"))
+		fmt.Println(fmt.Sprintf(i18n.T("cli.info.arch"), i18n.T("cli.info.arch.value")))
 	},
 }
 
+func localizeInfoCommand() {
+	infoCmd.Short = i18n.T("cli.info.short")
+	infoCmd.Long = i18n.T("cli.info.long")
+}
+
 func init() {
+	localizeInfoCommand()
 	// Добавляем команду info
 	rootCmd.AddCommand(infoCmd)
 }

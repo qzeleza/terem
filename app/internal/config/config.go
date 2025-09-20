@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/qzeleza/terem/internal/utils"
 	"gopkg.in/yaml.v3"
 )
@@ -23,6 +24,7 @@ const (
 type Config struct {
 	DebugMode bool   `yaml:"debugMode" json:"debugMode"` // Режим отладки
 	LogFile   string `yaml:"logFile" json:"logFile"`     // Путь до файла логов
+	Language  string `yaml:"language" json:"language"`   // Код языка интерфейса
 }
 
 // Load загружает конфигурацию и гарантирует наличие файлов/директорий.
@@ -33,21 +35,24 @@ func Load(explicitPath string) (*Config, string, error) {
 
 	path, err := resolveConfigPath(explicitPath)
 	if err != nil {
-		return nil, "", fmt.Errorf("определение пути конфигурации: %w", err)
+		return nil, "", fmt.Errorf("%s: %w", i18n.T("config.error.resolve_path"), err)
 	}
 
 	path, err = ensureConfigFile(path, cfg)
 	if err != nil {
-		return nil, "", fmt.Errorf("создание конфигурационного файла: %w", err)
+		return nil, "", fmt.Errorf("%s: %w", i18n.T("config.error.create_file"), err)
 	}
 
 	changedByMerge, err := mergeConfigFromFile(path, cfg)
 	if err != nil {
-		return nil, "", fmt.Errorf("чтение конфигурационного файла: %w", err)
+		return nil, "", fmt.Errorf("%s: %w", i18n.T("config.error.read_file"), err)
 	}
 
 	previousLogPath := cfg.LogFile
 	cfg.LogFile = ensureLogFilePath(cfg.LogFile)
+	if cfg.Language == "" {
+		cfg.Language = "ru"
+	}
 	logPathAdjusted := cfg.LogFile != previousLogPath
 
 	if changedByMerge || logPathAdjusted {
@@ -85,11 +90,21 @@ func (c *Config) SetLogFile(path string) {
 	c.LogFile = ensureLogFilePath(path)
 }
 
+// SetLanguage обновляет язык интерфейса.
+// lang — код языка (например, ru, en).
+func (c *Config) SetLanguage(lang string) {
+	if c == nil || lang == "" {
+		return
+	}
+	c.Language = lang
+}
+
 // defaultConfig возвращает конфигурацию по умолчанию.
 func defaultConfig() *Config {
 	return &Config{
 		DebugMode: utils.GetEnvBool("DEBUG", true),
 		LogFile:   utils.GetEnv("TEREM_LOG_FILE", defaultLogFilePath),
+		Language:  utils.GetEnv("TEREM_LANG", "ru"),
 	}
 }
 
@@ -173,13 +188,17 @@ func mergeConfigFromFile(path string, cfg *Config) (bool, error) {
 
 	originalDebug := cfg.DebugMode
 	originalLog := cfg.LogFile
+	originalLang := cfg.Language
 
 	cfg.DebugMode = fileCfg.DebugMode
 	if fileCfg.LogFile != "" {
 		cfg.LogFile = fileCfg.LogFile
 	}
+	if fileCfg.Language != "" {
+		cfg.Language = fileCfg.Language
+	}
 
-	changed := originalDebug != cfg.DebugMode || originalLog != cfg.LogFile
+	changed := originalDebug != cfg.DebugMode || originalLog != cfg.LogFile || originalLang != cfg.Language
 	return changed, nil
 }
 
@@ -241,10 +260,10 @@ func (c *Config) MarshalJSON() ([]byte, error) {
 // path — путь до файла конфигурации.
 func (c *Config) Save(path string) error {
 	if c == nil {
-		return errors.New("конфигурация не инициализирована")
+		return errors.New(i18n.T("config.error.not_initialized"))
 	}
 	if path == "" {
-		return errors.New("путь к файлу не указан")
+		return errors.New(i18n.T("config.error.path_missing"))
 	}
 
 	path, err := ensureConfigFile(path, c)

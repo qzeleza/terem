@@ -1,0 +1,167 @@
+# Основные данные приложения
+app.title=Терем™
+app.name=terem
+
+# Главный экран
+menu.main.queue.title=Библиотека приложений для роутера
+menu.main.task.title=Выбор режима работы
+menu.main.option.apps=Приложения
+menu.main.option.settings=Настройки
+menu.main.option.exit=Выход
+menu.main.error=Ошибка при выборе режима работы:
+menu.main.loop=главного меню
+menu.main.log.exit=Пользователь выбрал выход
+
+# Категории приложений
+category.security=Безопасность роутера
+category.network=Сетевые утилиты
+category.other=Прочие утилиты
+category.back=Назад
+category.queue.title=Выбор категории приложений
+category.task.title=Выбор категории
+category.error=Ошибка при выборе категории:
+category.warn.invalid=Неверный выбор категории
+
+# Сетевые приложения
+network.queue.title=Выбор сетевых приложений
+network.task.title=Выберите сетевое приложение
+network.error=Ошибка при выборе сетевого приложения:
+network.warn.invalid=Неверный выбор категории
+network.option.openssh=OpenSSH-сервер
+network.option.proxy=Прокси сервер 3proxy
+network.option.dns=DNSmasq-сервер
+network.option.adguard=AdGuard Home сервер
+network.option.back=Назад
+network.log.openssh=Выбран OpenSSH-сервер
+network.log.proxy=Выбран прокси сервер 3proxy
+network.log.dns=Выбран DNSmasq-сервер
+network.log.adguard=Выбран AdGuard Home сервер
+
+# Прочие приложения
+others.queue.title=Выбор прочих приложений
+others.task.title=Выбор приложения
+others.error=Ошибка при выборе приложения:
+others.warn.invalid=Неверный выбор категории
+others.option.info=Информация о системе
+others.option.back=Назад
+others.log.info=Выбрано приложение для информации о системе
+
+# Приложения безопасности
+security.queue.title=Выбор программ для безопасности роутера
+security.task.title=Выбор утилиты
+security.error=Ошибка при выборе утилиты:
+security.warn.invalid=Неверный выбор приложения безопасности
+security.option.parental=Родительский контроль
+security.option.antiscan=Защита роутера от атак Antiscan
+security.option.backup=Резервное копирование конфигурации
+security.option.back=Назад
+security.log.parental=Выбран родительский контроль
+security.log.antiscan=Выбрана защита роутера от атак Antiscan
+security.log.backup=Выбрано резервное копирование конфигурации
+
+# Настройки приложения
+settings.queue.title=Выбор настроек приложения
+settings.task.title=Выбор настроек
+settings.error=Ошибка при выборе настроек:
+settings.warn.invalid=Неверный выбор настройки
+settings.option.logging=Режим логирования
+settings.option.back=Назад
+settings.log.toggle=Режим логирования: %v
+
+# Системная информация
+sysinfo.task.title=Информация о системе
+sysinfo.summary.model=Модель
+sysinfo.summary.arch=Архитектура
+sysinfo.summary.memory=Память
+sysinfo.summary.uptime=Время работы
+sysinfo.summary.hostname=Доменное имя
+sysinfo.summary.ip=IP-адрес
+sysinfo.summary.gateway=Шлюз
+sysinfo.summary.mac=MAC-адрес
+sysinfo.log.fetch=Получение информации о системе
+sysinfo.log.first=Первое обращение к системной информации, загружаем данные...
+sysinfo.log.cache=Системная информация загружена и закеширована
+sysinfo.default=Неизвестно
+
+# Управление циклами и завершением
+loop.signal=Получен сигнал завершения, выходим из %s
+loop.main=главного меню
+loop.category=выбора категории приложений
+loop.network=цикла сетевых приложений
+loop.others=цикла прочих приложений
+loop.security=цикла безопасности
+loop.settings=настроек
+shutdown.log.start=Выполняется graceful shutdown...
+
+# CLI: общие сведения
+cli.root.use=terem
+cli.root.short=Терем - утилита для управления роутерами
+cli.root.long=Терем - это утилита для упрощения работы с утилитами на роутерах с entware/openwrt.\n\nИспользование:\n  terem           - запуск в интерактивном режиме\n  terem info      - информация о системе\n  terem [command] - выполнение конкретной команды
+
+# CLI: network
+cli.network.short=Отображает категории сетевых приложений
+cli.network.long=Отображает все приложения из категории сетевых приложений для работы в интерактивном режиме
+
+# CLI: debug
+cli.debug.short=Отображение отладочной информации
+cli.debug.long=Отображает отладочную информацию пакета в файле логов: версии программного обеспечения, аппаратные характеристики и т.д.
+cli.debug.error=Ошибка при настройке логгера:
+cli.debug.write_error=Ошибка при выводе сообщения:
+
+# CLI: info
+cli.info.short=Информация о системе
+cli.info.long=Отображает информацию о системе в полном объеме: версии программного обеспечения, аппаратные характеристики и т.д.
+cli.info.header=== Информация о системе ===
+cli.info.version=terem v1.0.0
+cli.info.go_version=Go версия: %s
+cli.info.arch=Архитектура: %s
+
+# Прочее
+info.loop=цикла прочих приложений
+
+cli.root.log.start=Запуск командной строки
+shutdown.signal=Получен сигнал %v, начинаем graceful shutdown
+cli.info.arch.value=ARM (по умолчанию для роутеров)
+
+# Конфигурация
+config.error.resolve_path=определение пути конфигурации
+config.error.create_file=создание конфигурационного файла
+config.error.read_file=чтение конфигурационного файла
+config.error.not_initialized=конфигурация не инициализирована
+config.error.path_missing=путь к файлу не указан
+
+# Утилиты
+utils.error.command=ошибка выполнения команды '%s': %v
+utils.error.read_file=ошибка чтения файла %s: %v
+utils.duration.days_hours_minutes=%d дн. %d ч. %d мин.
+utils.duration.hours_minutes=%d ч. %d мин.
+utils.duration.minutes=%d мин.
+
+# Системная информация
+sysinfo.error.model=не удалось определить модель роутера
+sysinfo.error.arch=ошибка получения архитектуры: %v
+sysinfo.error.mem_read=ошибка чтения информации о памяти: %v
+sysinfo.error.mem_missing=не удалось получить информацию о памяти
+sysinfo.error.uptime_read=ошибка чтения uptime: %v
+sysinfo.error.uptime_format=неверный формат uptime
+sysinfo.error.uptime_parse=ошибка парсинга uptime: %v
+sysinfo.error.hostname=не удалось получить имя хоста
+
+# Роутер
+router.error.command=ошибка выполнения команды: %v, stderr: %s
+router.status.already_installed=%s - уже установлена
+router.status.install_error=%s - ошибка установки: %v
+router.status.install_failed=%s - не удалось установить
+router.status.install_success=%s - успешно установлена
+router.error.system_info=не удалось получить информацию о системе: %v
+router.error.memory_info=не удалось получить информацию о памяти: %v
+router.error.disk_info=не удалось получить информацию о диске: %v
+
+# Логгер
+logger.error.force_rotate=ошибка принудительной ротации лога по SIGHUP
+logger.error.force_rotate_stderr=ошибка принудительной ротации лога по SIGHUP: %v
+logger.info.force_rotate=выполнена ротация лога по SIGHUP
+logger.info.force_rotate_stderr=выполнена ротация лога по SIGHUP
+
+# Язык
+language.warn.unsupported=не поддерживаемый язык %q, используем русский язык

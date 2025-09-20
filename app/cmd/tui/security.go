@@ -1,15 +1,16 @@
 package tui
 
 import (
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/qzeleza/termos"
 )
 
 // Список меню для выбора категорий безопасности в фиксированном порядке
 var securityAppList = []string{
-	"Родительский контроль",
-	"Защита роутера от атак Antiscan",
-	"Резервное копирование конфигурации",
-	"Назад",
+	SecurityOptionParental,
+	SecurityOptionAntiscan,
+	SecurityOptionBackup,
+	SecurityOptionBack,
 }
 
 // securityKeys соответствующие ключи для securityAppList
@@ -31,61 +32,61 @@ func (ac *AppConfig) SecurityCategoryLoop() {
 		}
 
 		switch ac.Mode {
-		case securityAppList[0]: // Родительский контроль
+		case SecurityOptionParental:
 			ac.SelectParentalControl()
-			// После выполнения действия показываем меню снова
 			return true
-		case securityAppList[1]: // Защита роутера от атак Antiscan
+		case SecurityOptionAntiscan:
 			ac.SelectAntiscan()
-			// После выполнения действия показываем меню снова
 			return true
-		case securityAppList[2]: // Резервное копирование конфигурации
+		case SecurityOptionBackup:
 			ac.SelectBackup()
-			// После выполнения действия показываем меню снова
 			return true
-		case securityAppList[3]: // Назад
+		case SecurityOptionBack:
 			return false
 		default:
-			ac.Log.Warn("Неверный выбор приложения безопасности")
+			ac.Log.Warn(i18n.T("security.warn.invalid"))
 			return false
 		}
-	}, "цикла безопасности")
+	}, i18n.T("loop.security"))
 }
 
 // SelectSecurityApp отображает меню для выбора утилит для работы с файловой системой
 func (ac *AppConfig) SelectSecurityApp() {
 	// Создаем основную очередь для выбора приложения
-	setupQueue := termos.NewQueue("Выбор программ для безопасности роутера").
+	setupQueue := termos.NewQueue(i18n.T("security.queue.title")).
 		WithAppName(ac.AppTitle).
 		WithSummary(false).
 		WithTitleColor(ac.AppTitleColor, true).
 		WithClearScreen(true)
 
+	labels := labelsFor(securityAppList)
+
 	// Создаем задачу для выбора пункта меню с запоминанием последней позиции
-	menuTask := termos.NewSingleSelectTask("Выбор утилиты", securityAppList).WithDefaultItem(ac.LastSecurityIndex)
+	menuTask := termos.NewSingleSelectTask(i18n.T("security.task.title"), labels).WithDefaultItem(ac.LastSecurityIndex)
 	setupQueue.AddTasks(menuTask)
 
 	// Запускаем выбор режима
 	if err := setupQueue.Run(); err != nil {
-		ac.Log.Fatal("Ошибка при выборе утилиты:", err)
+		ac.Log.Fatal(i18n.T("security.error"), err)
 	}
 
 	// Сохраняем выбранный индекс и устанавливаем режим
-	ac.LastSecurityIndex = menuTask.GetSelectedIndex()
-	ac.Mode = securityAppList[menuTask.GetSelectedIndex()]
+	selected := menuTask.GetSelectedIndex()
+	ac.LastSecurityIndex = selected
+	ac.Mode = securityAppList[selected]
 }
 
 // SelectParentalControl отображает меню для выбора утилит для работы с файловой системой
 func (ac *AppConfig) SelectParentalControl() {
-	ac.Log.Info("Выбран родительский контроль")
+	ac.Log.Info(i18n.T("security.log.parental"))
 }
 
 // SelectAntiscan отображает меню для выбора утилит для работы с файловой системой
 func (ac *AppConfig) SelectAntiscan() {
-	ac.Log.Info("Выбрана защита роутера от атак Antiscan")
+	ac.Log.Info(i18n.T("security.log.antiscan"))
 }
 
 // SelectAntiscan отображает меню для выбора утилит для работы с файловой системой
 func (ac *AppConfig) SelectBackup() {
-	ac.Log.Info("Выбрано резервное копирование конфигурации")
+	ac.Log.Info(i18n.T("security.log.backup"))
 }

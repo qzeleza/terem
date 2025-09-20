@@ -10,10 +10,12 @@ import (
 
 	"github.com/qzeleza/terem/cmd/args"
 	"github.com/qzeleza/terem/cmd/tui"
+	"github.com/qzeleza/terem/internal/i18n"
 )
 
 func main() {
 
+	LANGUAGE := "en"
 	DEBUG := false
 	VERSION := "1.0.0"
 	APPNAME := "terem"
@@ -21,9 +23,9 @@ func main() {
 	CONF := fmt.Sprintf("/opt/etc/%s/config.yaml", APPNAME)
 
 	// 1. Инициализируем конфигурацию приложения
-	ac, err := tui.NewSetup(APPNAME, VERSION, DEBUG, LOGFILE, CONF)
+	ac, err := tui.NewSetup(LANGUAGE, APPNAME, VERSION, DEBUG, LOGFILE, CONF)
 	if err != nil {
-		fmt.Printf("Ошибка создания конфигурации: %v\n", err)
+		fmt.Printf(i18n.T("main.error.setup")+"\n", err)
 		os.Exit(1)
 	}
 
@@ -43,12 +45,12 @@ func main() {
 	// 5. Восстановление паники в случае ошибки
 	defer func() {
 		if r := recover(); r != nil {
-			msg := fmt.Sprintf("ПАНИКА: %v\n%s", r, debug.Stack())
+			msg := fmt.Sprintf("PANIC: %v\n%s", r, debug.Stack())
 			fmt.Fprintf(os.Stderr, "%s\n", msg)
 
 			// Если логгер уже инициализирован, логируем ошибку
 			if ac != nil {
-				ac.Log.Error("Критическая ошибка: ", msg)
+				ac.Log.Error("critical error: ", msg)
 			}
 
 			os.Exit(1)
@@ -69,7 +71,7 @@ func setupSignalHandler(cancel context.CancelFunc, ac *tui.AppConfig) {
 
 	go func() {
 		sig := <-signalChan
-		ac.Log.Info(fmt.Sprintf("Получен сигнал %v, начинаем graceful shutdown", sig))
+		ac.Log.Info(fmt.Sprintf(i18n.T("shutdown.signal"), sig))
 		cancel()
 	}()
 }

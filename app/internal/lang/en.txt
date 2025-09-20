@@ -1,0 +1,153 @@
+app.title=Terem™
+app.name=terem
+
+menu.main.queue.title=Router application library
+menu.main.task.title=Select operation mode
+menu.main.option.apps=Applications
+menu.main.option.settings=Settings
+menu.main.option.exit=Exit
+menu.main.error=Failed to select operation mode:
+menu.main.loop=main menu
+menu.main.log.exit=User chose exit
+
+category.security=Router security
+category.network=Network tools
+category.other=Other tools
+category.back=Back
+category.queue.title=Choose application category
+category.task.title=Select category
+category.error=Failed to choose category:
+category.warn.invalid=Invalid category selection
+
+network.queue.title=Choose network tool
+network.task.title=Select a network tool
+network.error=Failed to choose a network tool:
+network.warn.invalid=Invalid category selection
+network.option.openssh=OpenSSH server
+network.option.proxy=3proxy server
+network.option.dns=DNSmasq server
+network.option.adguard=AdGuard Home server
+network.option.back=Back
+network.log.openssh=OpenSSH server selected
+network.log.proxy=Proxy server 3proxy selected
+network.log.dns=DNSmasq server selected
+network.log.adguard=AdGuard Home server selected
+
+others.queue.title=Choose other tools
+others.task.title=Select tool
+others.error=Failed to choose tool:
+others.warn.invalid=Invalid category selection
+others.option.info=System information
+others.option.back=Back
+others.log.info=System information tool selected
+
+security.queue.title=Choose router security tools
+security.task.title=Select utility
+security.error=Failed to choose utility:
+security.warn.invalid=Invalid security selection
+security.option.parental=Parental control
+security.option.antiscan=Router attack protection (Antiscan)
+security.option.backup=Backup configuration
+security.option.back=Back
+security.log.parental=Parental control selected
+security.log.antiscan=Antiscan protection selected
+security.log.backup=Configuration backup selected
+
+settings.queue.title=Choose application settings
+settings.task.title=Select settings
+settings.error=Failed to choose settings:
+settings.warn.invalid=Invalid settings selection
+settings.option.logging=Logging mode
+settings.option.back=Back
+settings.log.toggle=Logging mode: %v
+
+sysinfo.task.title=System information
+sysinfo.summary.model=Model
+sysinfo.summary.arch=Architecture
+sysinfo.summary.memory=Memory
+sysinfo.summary.uptime=Uptime
+sysinfo.summary.hostname=Hostname
+sysinfo.summary.ip=IP address
+sysinfo.summary.gateway=Gateway
+sysinfo.summary.mac=MAC address
+sysinfo.log.fetch=Fetching system information
+sysinfo.log.first=First system info request, loading data...
+sysinfo.log.cache=System information cached
+sysinfo.default=Unknown
+
+loop.signal=Termination signal received, leaving %s
+loop.main=main menu
+loop.category=category selection loop
+loop.network=network tools loop
+loop.others=other tools loop
+loop.security=security loop
+loop.settings=settings loop
+shutdown.log.start=Graceful shutdown in progress...
+
+cli.root.use=terem
+cli.root.short=Terem - router management tool
+cli.root.long=Terem helps work with entware/openwrt router utilities.\n\nUsage:\n  terem           - start interactive mode\n  terem info      - show system information\n  terem [command] - run a specific command
+
+cli.network.short=Show network tool categories
+cli.network.long=Shows all network tools available in interactive mode
+
+cli.debug.short=Show debug information
+cli.debug.long=Writes debug information to log file: software versions, hardware details, etc.
+cli.debug.error=Failed to configure logger:
+cli.debug.write_error=Failed to write log message:
+
+cli.info.short=System information
+cli.info.long=Displays detailed system information: software versions, hardware characteristics, etc.
+cli.info.header=== System information ===
+cli.info.version=terem v1.0.0
+cli.info.go_version=Go version: %s
+cli.info.arch=Architecture: %s
+
+info.loop=other tools loop
+
+cli.root.log.start=Starting command interface
+shutdown.signal=Signal %v received, starting graceful shutdown
+cli.info.arch.value=ARM (default target for routers)
+
+# Config
+config.error.resolve_path=Failed to resolve configuration path
+config.error.create_file=Failed to create configuration file
+config.error.read_file=Failed to read configuration file
+config.error.not_initialized=Configuration is not initialized
+config.error.path_missing=Configuration file path is not specified
+
+# Utils
+utils.error.command=Failed to execute command '%s': %v
+utils.error.read_file=Failed to read file %s: %v
+utils.duration.days_hours_minutes=%d d %d h %d min
+utils.duration.hours_minutes=%d h %d min
+utils.duration.minutes=%d min
+
+# Sysinfo
+sysinfo.error.model=Failed to determine router model
+sysinfo.error.arch=Failed to get architecture: %v
+sysinfo.error.mem_read=Failed to read memory info: %v
+sysinfo.error.mem_missing=Failed to obtain memory info
+sysinfo.error.uptime_read=Failed to read uptime: %v
+sysinfo.error.uptime_format=Invalid uptime format
+sysinfo.error.uptime_parse=Failed to parse uptime: %v
+sysinfo.error.hostname=Failed to get hostname
+
+# Router
+router.error.command=Command execution error: %v, stderr: %s
+router.status.already_installed=%s is already installed
+router.status.install_error=%s installation error: %v
+router.status.install_failed=Failed to install %s
+router.status.install_success=%s installed successfully
+router.error.system_info=Failed to get system info: %v
+router.error.memory_info=Failed to get memory info: %v
+router.error.disk_info=Failed to get disk info: %v
+
+# Logger
+logger.error.force_rotate=Failed to rotate log on SIGHUP
+logger.error.force_rotate_stderr=Failed to rotate log on SIGHUP: %v
+logger.info.force_rotate=Log rotated on SIGHUP
+logger.info.force_rotate_stderr=Log rotated on SIGHUP
+
+# Language
+language.warn.unsupported=Unsupported language %q, using Russian language

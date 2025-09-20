@@ -1,0 +1,153 @@
+app.title=Terem™
+app.name=terem
+
+menu.main.queue.title=Yönlendirici uygulama kitaplığı
+menu.main.task.title=Çalışma modunu seçin
+menu.main.option.apps=Uygulamalar
+menu.main.option.settings=Ayarlar
+menu.main.option.exit=Çıkış
+menu.main.error=Çalışma modu seçilemedi:
+menu.main.loop=ana menü
+menu.main.log.exit=Kullanıcı çıkışı seçti
+
+category.security=Yönlendirici güvenliği
+category.network=Ağ araçları
+category.other=Diğer araçlar
+category.back=Geri
+category.queue.title=Uygulama kategorisini seçin
+category.task.title=Kategori seçin
+category.error=Kategori seçilirken hata oluştu:
+category.warn.invalid=Geçersiz kategori seçimi
+
+network.queue.title=Ağ aracını seçin
+network.task.title=Bir ağ aracı seçin
+network.error=Ağ aracı seçilemedi:
+network.warn.invalid=Geçersiz kategori seçimi
+network.option.openssh=OpenSSH sunucusu
+network.option.proxy=3proxy sunucusu
+network.option.dns=DNSmasq sunucusu
+network.option.adguard=AdGuard Home sunucusu
+network.option.back=Geri
+network.log.openssh=OpenSSH sunucusu seçildi
+network.log.proxy=3proxy sunucusu seçildi
+network.log.dns=DNSmasq sunucusu seçildi
+network.log.adguard=AdGuard Home sunucusu seçildi
+
+others.queue.title=Diğer araçları seçin
+others.task.title=Bir araç seçin
+others.error=Araç seçilemedi:
+others.warn.invalid=Geçersiz kategori seçimi
+others.option.info=Sistem bilgisi
+others.option.back=Geri
+others.log.info=Sistem bilgisi aracı seçildi
+
+security.queue.title=Yönlendirici güvenlik araçlarını seçin
+security.task.title=Bir yardımcı program seçin
+security.error=Güvenlik yardımcı programı seçilemedi:
+security.warn.invalid=Geçersiz güvenlik seçimi
+security.option.parental=Ebeveyn denetimi
+security.option.antiscan=Yönlendirici saldırı koruması (Antiscan)
+security.option.backup=Yapılandırma yedekleme
+security.option.back=Geri
+security.log.parental=Ebeveyn denetimi seçildi
+security.log.antiscan=Antiscan koruması seçildi
+security.log.backup=Yapılandırma yedekleme seçildi
+
+settings.queue.title=Uygulama ayarlarını seçin
+settings.task.title=Ayar seçin
+settings.error=Ayarlar seçilemedi:
+settings.warn.invalid=Geçersiz ayar seçimi
+settings.option.logging=Günlükleme modu
+settings.option.back=Geri
+settings.log.toggle=Günlükleme modu: %v
+
+sysinfo.task.title=Sistem bilgisi
+sysinfo.summary.model=Model
+sysinfo.summary.arch=Mimari
+sysinfo.summary.memory=Hafıza
+sysinfo.summary.uptime=Çalışma süresi
+sysinfo.summary.hostname=Ana bilgisayar
+sysinfo.summary.ip=IP adresi
+sysinfo.summary.gateway=Ağ geçidi
+sysinfo.summary.mac=MAC adresi
+sysinfo.log.fetch=Sistem bilgisi alınıyor
+sysinfo.log.first=İlk sistem bilgisi isteği, veriler yükleniyor...
+sysinfo.log.cache=Sistem bilgisi önbelleğe alındı
+sysinfo.default=Bilinmiyor
+
+loop.signal=%s için sonlandırma sinyali alındı, çıkılıyor
+loop.main=ana menü
+loop.category=kategori seçimi döngüsü
+loop.network=ağ araçları döngüsü
+loop.others=diğer araçlar döngüsü
+loop.security=güvenlik döngüsü
+loop.settings=ayarlar döngüsü
+shutdown.log.start=Kademeli kapatma başlatılıyor...
+
+cli.root.use=terem
+cli.root.short=Terem - yönlendirici yönetim aracı
+cli.root.long=Terem, entware/openwrt yönlendiricilerindeki yardımcı programlarla çalışmayı kolaylaştırır.\n\nKullanım:\n  terem           - etkileşimli modu başlat\n  terem info      - sistem bilgisini göster\n  terem [command] - belirli bir komutu çalıştır
+
+cli.network.short=Ağ aracı kategorilerini göster
+cli.network.long=Etkileşimli modda kullanılabilen tüm ağ araçlarını listeler
+
+cli.debug.short=Hata ayıklama bilgilerini göster
+cli.debug.long=Günlük dosyasına hata ayıklama bilgisi yazar: yazılım sürümleri, donanım ayrıntıları vb.
+cli.debug.error=Günlükleyici yapılandırılamadı:
+cli.debug.write_error=Günlük mesajı yazılamadı:
+
+cli.info.short=Sistem bilgisi
+cli.info.long=Ayrıntılı sistem bilgisini gösterir: yazılım sürümleri, donanım özellikleri vb.
+cli.info.header=== Sistem bilgisi ===
+cli.info.version=terem v1.0.0
+cli.info.go_version=Go sürümü: %s
+cli.info.arch=Mimari: %s
+
+info.loop=diğer araçlar döngüsü
+
+cli.root.log.start=Komut arayüzü başlatılıyor
+shutdown.signal=%v sinyali alındı, kademeli kapatma başlatılıyor
+cli.info.arch.value=ARM (yönlendiriciler için varsayılan hedef)
+
+# Yapılandırma
+config.error.resolve_path=Yapılandırma yolu belirlenemedi
+config.error.create_file=Yapılandırma dosyası oluşturulamadı
+config.error.read_file=Yapılandırma dosyası okunamadı
+config.error.not_initialized=Yapılandırma başlatılmadı
+config.error.path_missing=Yapılandırma dosyasının yolu belirtilmedi
+
+# Araçlar
+utils.error.command=Komut '%s' çalıştırılamadı: %v
+utils.error.read_file=%s dosyası okunamadı: %v
+utils.duration.days_hours_minutes=%d g %d sa %d dk
+utils.duration.hours_minutes=%d sa %d dk
+utils.duration.minutes=%d dk
+
+# Sistem bilgisi
+sysinfo.error.model=Yönlendirici modeli belirlenemedi
+sysinfo.error.arch=Mimari alınamadı: %v
+sysinfo.error.mem_read=Hafıza bilgisi okunamadı: %v
+sysinfo.error.mem_missing=Hafıza bilgisi alınamadı
+sysinfo.error.uptime_read=Çalışma süresi okunamadı: %v
+sysinfo.error.uptime_format=Geçersiz çalışma süresi biçimi
+sysinfo.error.uptime_parse=Çalışma süresi ayrıştırılamadı: %v
+sysinfo.error.hostname=Ana bilgisayar adı alınamadı
+
+# Yönlendirici
+router.error.command=Komut yürütme hatası: %v, stderr: %s
+router.status.already_installed=%s zaten kurulu
+router.status.install_error=%s kurulumu sırasında hata: %v
+router.status.install_failed=%s kurulamadı
+router.status.install_success=%s başarıyla kuruldu
+router.error.system_info=Sistem bilgisi alınamadı: %v
+router.error.memory_info=Hafıza bilgisi alınamadı: %v
+router.error.disk_info=Disk bilgisi alınamadı: %v
+
+# Günlükleyici
+logger.error.force_rotate=SIGHUP üzerinde günlük döndürme başarısız
+logger.error.force_rotate_stderr=SIGHUP üzerinde günlük döndürme başarısız: %v
+logger.info.force_rotate=SIGHUP üzerinde günlük döndürüldü
+logger.info.force_rotate_stderr=SIGHUP üzerinde günlük döndürüldü
+
+# Dil
+language.warn.unsupported=Desteklenmeyen dil %q, Rusça kullanılacak

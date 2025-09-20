@@ -7,6 +7,7 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	conf "github.com/qzeleza/terem/internal/config"
+	"github.com/qzeleza/terem/internal/i18n"
 	log "github.com/qzeleza/terem/internal/zlog"
 	"github.com/qzeleza/termos"
 )
@@ -31,20 +32,21 @@ type AppConfig struct {
 	Mode          string
 	Category      string
 	Debug         bool
+	Language      string
 	SelectedUtil  SelectedApp
 	// Поля для кеширования системной информации
 	cachedSysInfo *SysInfoResult
 	sysInfoOnce   sync.Once
 	// Поля для запоминания последних выбранных позиций в меню
-	LastMainMenuIndex     int // Главное меню (Приложения/Настройки/Выход)
-	LastCategoryIndex     int // Меню категорий (Безопасность/Сетевые/Прочие/Назад)
-	LastSecurityIndex     int // Меню безопасности
-	LastNetworkIndex      int // Меню сетевых утилит
-	LastOthersIndex       int // Меню прочих утилит
-	LastSettingsIndex     int // Меню настроек
+	LastMainMenuIndex int // Главное меню (Приложения/Настройки/Выход)
+	LastCategoryIndex int // Меню категорий (Безопасность/Сетевые/Прочие/Назад)
+	LastSecurityIndex int // Меню безопасности
+	LastNetworkIndex  int // Меню сетевых утилит
+	LastOthersIndex   int // Меню прочих утилит
+	LastSettingsIndex int // Меню настроек
 }
 
-func NewSetup(appName string, version string, debug bool, logFile string, confFile string) (*AppConfig, error) {
+func NewSetup(language string, appName string, version string, debug bool, logFile string, confFile string) (*AppConfig, error) {
 	// Загружаем конфигурацию
 	confData, resolvedPath, err := conf.Load(confFile)
 	if err != nil {
@@ -56,15 +58,29 @@ func NewSetup(appName string, version string, debug bool, logFile string, confFi
 		logFile = confData.LogFile
 	}
 
+	// Устанавливаем язык
+	if err := i18n.SetLanguage(language); err != nil {
+		fmt.Printf(i18n.T("language.warn.unsupported")+"\n", language)
+		language = "ru"
+		_ = i18n.SetLanguage(language)
+	}
+
+	if err := i18n.Error(); err != nil {
+		return nil, err
+	}
+
+	confData.SetLanguage(language)
+
 	ac := &AppConfig{
 		AppName:       appName,
 		AppTitleColor: termos.GreenBright,
-		AppTitle:      "Терем™",
+		AppTitle:      i18n.T("app.title"),
 		LogFile:       logFile,
 		ConfFile:      resolvedPath,
 		Conf:          *confData,
 		Version:       version,
 		Debug:         debug,
+		Language:      i18n.Language(),
 		SelectedUtil: SelectedApp{
 			Name:        "",
 			Description: "",
@@ -78,7 +94,6 @@ func NewSetup(appName string, version string, debug bool, logFile string, confFi
 
 	return ac, nil
 }
-
 func (ac *AppConfig) SetupLogger() error {
 	logger := log.New(ac.LogFile)
 
@@ -107,7 +122,7 @@ func (ac *AppConfig) IsContextCancelled() bool {
 
 // GracefulShutdown выполняет graceful shutdown приложения
 func (ac *AppConfig) GracefulShutdown() {
-	ac.Log.Info("Выполняется graceful shutdown...")
+	ac.Log.Info(i18n.T("shutdown.log.start"))
 	if ac.CancelFunc != nil {
 		ac.CancelFunc()
 	}
@@ -119,7 +134,7 @@ func (ac *AppConfig) ContextualLoop(loopBody func() bool, loopName string) {
 	for {
 		// Проверяем контекст перед каждой итерацией
 		if ac.IsContextCancelled() {
-			ac.Log.Info(fmt.Sprintf("Получен сигнал завершения, выходим из %s", loopName))
+			ac.Log.Info(fmt.Sprintf(i18n.T("loop.signal"), loopName))
 			return
 		}
 
@@ -134,10 +149,10 @@ func (ac *AppConfig) ContextualLoop(loopBody func() bool, loopName string) {
 // Использует sync.Once для гарантии однократного выполнения
 func (ac *AppConfig) GetSysInfo() *SysInfoResult {
 	ac.sysInfoOnce.Do(func() {
-		ac.Log.Debug("Первое обращение к системной информации, загружаем данные...")
+		ac.Log.Debug(i18n.T("sysinfo.log.first"))
 		ac.cachedSysInfo = &SysInfoResult{}
 		ac.getSysInfo(ac.cachedSysInfo)
-		ac.Log.Debug("Системная информация загружена и закеширована")
+		ac.Log.Debug(i18n.T("sysinfo.log.cache"))
 	})
 	return ac.cachedSysInfo
 }

@@ -1,14 +1,15 @@
 package tui
 
 import (
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/qzeleza/termos"
 )
 
 var categoryList = []string{
-	"Безопасность роутера",
-	"Сетевые утилиты",
-	"Прочие утилиты",
-	"Назад",
+	CategorySecurity,
+	CategoryNetwork,
+	CategoryOther,
+	CategoryBack,
 }
 
 // SelectCategory отображает меню для выбора категории приложений
@@ -22,43 +23,46 @@ func (ac *AppConfig) SelectCategoryLoop() {
 		}
 
 		switch ac.Category {
-		case categoryList[0]: // Безопасность роутера
+		case CategorySecurity:
 			ac.SecurityCategoryLoop()
-		case categoryList[1]: // Сетевые утилиты
+		case CategoryNetwork:
 			ac.NetworkCategoryLoop()
-		case categoryList[2]: // Прочие утилиты
+		case CategoryOther:
 			ac.OtherCategoryLoop()
-		case categoryList[3]: // Выход
+		case CategoryBack:
 			return false
 		default:
-			ac.Log.Warn("Неверный выбор категории")
+			ac.Log.Warn(i18n.T("category.warn.invalid"))
 			return false
 		}
 
 		// После возврата из подменю показываем меню категорий снова
 		return true
-	}, "выбора категории приложений")
+	}, i18n.T("loop.category"))
 }
 
 // SelectCategory отображает меню для выбора категории приложений
 func (ac *AppConfig) SelectCategoryFromList() {
 	// Создаем основную очередь для выбора приложения
-	setupQueue := termos.NewQueue("Выбор категории приложений").
+	setupQueue := termos.NewQueue(i18n.T("category.queue.title")).
 		WithAppName(ac.AppTitle).
 		WithSummary(false).
 		WithTitleColor(ac.AppTitleColor, true).
 		WithClearScreen(true)
 
+	labels := labelsFor(categoryList)
+
 	// Создаем задачу для выбора пункта меню с запоминанием последней позиции
-	menuTask := termos.NewSingleSelectTask("Выбор категории", categoryList).WithDefaultItem(ac.LastCategoryIndex)
+	menuTask := termos.NewSingleSelectTask(i18n.T("category.task.title"), labels).WithDefaultItem(ac.LastCategoryIndex)
 	setupQueue.AddTasks(menuTask)
 
 	// Запускаем выбор режима
 	if err := setupQueue.Run(); err != nil {
-		ac.Log.Fatal("Ошибка при выборе категории:", err)
+		ac.Log.Fatal(i18n.T("category.error"), err)
 	}
 
 	// Сохраняем выбранный индекс и устанавливаем категорию
-	ac.LastCategoryIndex = menuTask.GetSelectedIndex()
-	ac.Category = categoryList[menuTask.GetSelectedIndex()]
+	selected := menuTask.GetSelectedIndex()
+	ac.LastCategoryIndex = selected
+	ac.Category = categoryList[selected]
 }

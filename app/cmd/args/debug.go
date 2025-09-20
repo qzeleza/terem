@@ -1,6 +1,7 @@
 package args
 
 import (
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/spf13/cobra"
 )
 
@@ -8,22 +9,27 @@ import (
 var debugCmd = &cobra.Command{
 	Use:     "--debug",
 	Aliases: []string{"d", "debug"},
-	Short:   "Отображение отладочной информации",
-	Long: `Отображает отладочную информацию пакета в файле логов:
-			версии программного обеспечения, аппаратные характеристики и т.д.`,
+	Short:   i18n.T("cli.debug.short"),
+	Long:    i18n.T("cli.debug.long"),
 	Run: func(cmd *cobra.Command, args []string) {
 		AppConfig.Debug = true
 		err := AppConfig.SetupLogger()
 		if err != nil {
-			err := AppConfig.Log.Fatal("Ошибка при настройке логгера:", err)
+			err := AppConfig.Log.Fatal(i18n.T("cli.debug.error"), err)
 			if err != nil {
-				AppConfig.Log.Error("Ошибка при выводе сообщения:", err)
+				AppConfig.Log.Error(i18n.T("cli.debug.write_error"), err)
 			}
 		}
 	},
 }
 
+func localizeDebugCommand() {
+	debugCmd.Short = i18n.T("cli.debug.short")
+	debugCmd.Long = i18n.T("cli.debug.long")
+}
+
 func init() {
+	localizeDebugCommand()
 	// Добавляем команду debug
 	rootCmd.AddCommand(debugCmd)
 }

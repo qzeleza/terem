@@ -1,16 +1,17 @@
 package tui
 
 import (
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/qzeleza/termos"
 )
 
 // networkList содержит список сетевых приложений в фиксированном порядке
 var networkList = []string{
-	"OpenSSH-сервер",
-	"Прокси сервер 3proxy",
-	"DNSmasq-сервер",
-	"AdGuard Home сервер",
-	"Назад",
+	NetworkOptionOpenSSH,
+	NetworkOptionProxy,
+	NetworkOptionDNS,
+	NetworkOptionAdGuard,
+	NetworkOptionBack,
 }
 
 // networkKeys соответствующие ключи для networkList
@@ -33,70 +34,69 @@ func (ac *AppConfig) NetworkCategoryLoop() {
 		}
 
 		switch ac.Category {
-		case networkList[0]: // OpenSSH-сервер
+		case NetworkOptionOpenSSH:
 			ac.SelectOpenSSHApp()
-			// После выполнения действия показываем меню снова
 			return true
-		case networkList[1]: // Прокси сервер 3proxy
+		case NetworkOptionProxy:
 			ac.SelectProxyApp()
-			// После выполнения действия показываем меню снова
 			return true
-		case networkList[2]: // DNSmasq-сервер
+		case NetworkOptionDNS:
 			ac.SelectDNSApp()
-			// После выполнения действия показываем меню снова
 			return true
-		case networkList[3]: // AdGuard Home сервер
+		case NetworkOptionAdGuard:
 			ac.SelectAdGuardApp()
-			// После выполнения действия показываем меню снова
 			return true
-		case networkList[4]: // Назад
+		case NetworkOptionBack:
 			return false
 		default:
-			ac.Log.Warn("Неверный выбор категории")
+			ac.Log.Warn(i18n.T("network.warn.invalid"))
 			return false
 		}
-	}, "цикла сетевых приложений")
+	}, i18n.T("loop.network"))
 }
 
 // SelectNetworkCategory отображает меню для выбора сетевых приложений
 func (ac *AppConfig) SelectNetworkCategory() {
 	// Создаем основную очередь для выбора приложения
-	setupQueue := termos.NewQueue("Выбор сетевых приложений").
+	setupQueue := termos.NewQueue(i18n.T("network.queue.title")).
 		WithAppName(ac.AppTitle).
 		WithSummary(false).
 		WithTitleColor(ac.AppTitleColor, true).
 		WithClearScreen(true)
 
+	labels := labelsFor(networkList)
+
 	// Создаем задачу для выбора пункта меню с запоминанием последней позиции
-	menuTask := termos.NewSingleSelectTask("Выберите сетевое приложение", networkList).WithDefaultItem(ac.LastNetworkIndex)
+	menuTask := termos.NewSingleSelectTask(i18n.T("network.task.title"), labels).WithDefaultItem(ac.LastNetworkIndex)
 	setupQueue.AddTasks(menuTask)
 
 	// Запускаем выбор режима
 	if err := setupQueue.Run(); err != nil {
-		ac.Log.Fatal("Ошибка при выборе сетевого приложения:", err)
+		ac.Log.Fatal(i18n.T("network.error"), err)
 	}
 
 	// Сохраняем выбранный индекс и устанавливаем категорию
-	ac.LastNetworkIndex = menuTask.GetSelectedIndex()
-	ac.Category = networkList[menuTask.GetSelectedIndex()]
+	selected := menuTask.GetSelectedIndex()
+	ac.LastNetworkIndex = selected
+	ac.Category = networkList[selected]
 }
 
 // SelectOpenSSHApp отображает меню для выбора OpenSSH-сервера
 func (ac *AppConfig) SelectOpenSSHApp() {
-	ac.Log.Info("Выбран OpenSSH-сервер")
+	ac.Log.Info(i18n.T("network.log.openssh"))
 }
 
 // SelectProxyApp отображает меню для выбора прокси сервера
 func (ac *AppConfig) SelectProxyApp() {
-	ac.Log.Info("Выбран прокси сервер 3proxy")
+	ac.Log.Info(i18n.T("network.log.proxy"))
 }
 
 // SelectDNSApp отображает меню для выбора DNS-сервера
 func (ac *AppConfig) SelectDNSApp() {
-	ac.Log.Info("Выбран DNSmasq-сервер")
+	ac.Log.Info(i18n.T("network.log.dns"))
 }
 
 // SelectAdGuardApp отображает меню для выбора AdGuard Home сервера
 func (ac *AppConfig) SelectAdGuardApp() {
-	ac.Log.Info("Выбран AdGuard Home сервер")
+	ac.Log.Info(i18n.T("network.log.adguard"))
 }

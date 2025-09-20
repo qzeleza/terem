@@ -3,13 +3,14 @@ package tui
 import (
 	"log"
 
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/qzeleza/termos"
 )
 
 // otherList содержит список прочих приложений в фиксированном порядке
 var otherList = []string{
-	"Информация о системе",
-	"Назад",
+	OtherOptionInfo,
+	OtherOptionBack,
 }
 
 // otherKeys соответствующие ключи для otherList
@@ -29,43 +30,45 @@ func (ac *AppConfig) OtherCategoryLoop() {
 		}
 
 		switch ac.Category {
-		case otherList[0]: // Информация о системе
+		case OtherOptionInfo:
 			ac.SelectInfoApp()
-			// После выполнения действия показываем меню снова
 			return true
-		case otherList[1]: // Назад
+		case OtherOptionBack:
 			return false
 		default:
-			ac.Log.Warn("Неверный выбор категории")
+			ac.Log.Warn(i18n.T("others.warn.invalid"))
 			return false
 		}
-	}, "цикла прочих приложений")
+	}, i18n.T("loop.others"))
 }
 
 // SelectOtherCategory отображает меню для выбора прочих приложений
 func (ac *AppConfig) SelectOtherCategory() {
 	// Создаем основную очередь для выбора приложения
-	setupQueue := termos.NewQueue("Выбор прочих приложений").
+	setupQueue := termos.NewQueue(i18n.T("others.queue.title")).
 		WithAppName(ac.AppTitle).
 		WithSummary(false).
 		WithTitleColor(ac.AppTitleColor, true).
 		WithClearScreen(true)
 
+	labels := labelsFor(otherList)
+
 	// Создаем задачу для выбора пункта меню с запоминанием последней позиции
-	menuTask := termos.NewSingleSelectTask("Выбор приложения", otherList).WithDefaultItem(ac.LastOthersIndex)
+	menuTask := termos.NewSingleSelectTask(i18n.T("others.task.title"), labels).WithDefaultItem(ac.LastOthersIndex)
 	setupQueue.AddTasks(menuTask)
 
 	// Запускаем выбор режима
 	if err := setupQueue.Run(); err != nil {
-		log.Fatal("Ошибка при выборе приложения:", err)
+		log.Fatal(i18n.T("others.error"), err)
 	}
 
 	// Сохраняем выбранный индекс и устанавливаем категорию
-	ac.LastOthersIndex = menuTask.GetSelectedIndex()
-	ac.Category = otherList[menuTask.GetSelectedIndex()]
+	selected := menuTask.GetSelectedIndex()
+	ac.LastOthersIndex = selected
+	ac.Category = otherList[selected]
 }
 
 // SelectInfoApp отображает меню для выбора утилит для работы с файловой системой
 func (ac *AppConfig) SelectInfoApp() {
-	ac.Log.Info("Выбрано приложение для информации о системе")
+	ac.Log.Info(i18n.T("others.log.info"))
 }

@@ -13,6 +13,7 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/rs/zerolog"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -250,18 +251,18 @@ func newZerolog(writer zerolog.ConsoleWriter) zerolog.Logger {
 
 func logSIGHUPError(err error) {
 	if log := registry.Primary(); log != nil {
-		log.zlog.Error().Err(err).Msg("ошибка принудительной ротации лога по SIGHUP")
+		log.zlog.Error().Err(err).Msg(i18n.T("logger.error.force_rotate"))
 		return
 	}
-	fmt.Fprintf(os.Stderr, "ошибка принудительной ротации лога по SIGHUP: %v\n", err)
+	fmt.Fprintf(os.Stderr, i18n.T("logger.error.force_rotate_stderr")+"\n", err)
 }
 
 func logSIGHUPSuccess() {
 	if log := registry.Primary(); log != nil {
-		log.zlog.Info().Msg("выполнена ротация лога по SIGHUP")
+		log.zlog.Info().Msg(i18n.T("logger.info.force_rotate"))
 		return
 	}
-	fmt.Fprintln(os.Stderr, "выполнена ротация лога по SIGHUP")
+	fmt.Fprintln(os.Stderr, i18n.T("logger.info.force_rotate_stderr"))
 }
 
 type loggerRegistry struct {

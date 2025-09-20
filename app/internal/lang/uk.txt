@@ -1,0 +1,153 @@
+app.title=Терем™
+app.name=terem
+
+menu.main.queue.title=Бібліотека застосунків для роутера
+menu.main.task.title=Оберіть режим роботи
+menu.main.option.apps=Застосунки
+menu.main.option.settings=Налаштування
+menu.main.option.exit=Вихід
+menu.main.error=Не вдалося обрати режим роботи:
+menu.main.loop=головного меню
+menu.main.log.exit=Користувач обрав вихід
+
+category.security=Безпека роутера
+category.network=Мережеві інструменти
+category.other=Інші інструменти
+category.back=Назад
+category.queue.title=Оберіть категорію застосунків
+category.task.title=Оберіть категорію
+category.error=Помилка під час вибору категорії:
+category.warn.invalid=Неправильний вибір категорії
+
+network.queue.title=Оберіть мережевий інструмент
+network.task.title=Виберіть мережевий інструмент
+network.error=Не вдалося обрати мережевий інструмент:
+network.warn.invalid=Неправильний вибір категорії
+network.option.openssh=Сервер OpenSSH
+network.option.proxy=Сервер 3proxy
+network.option.dns=Сервер DNSmasq
+network.option.adguard=Сервер AdGuard Home
+network.option.back=Назад
+network.log.openssh=Обрано сервер OpenSSH
+network.log.proxy=Обрано сервер 3proxy
+network.log.dns=Обрано сервер DNSmasq
+network.log.adguard=Обрано сервер AdGuard Home
+
+others.queue.title=Оберіть інші інструменти
+others.task.title=Оберіть інструмент
+others.error=Не вдалося обрати інструмент:
+others.warn.invalid=Неправильний вибір категорії
+others.option.info=Інформація про систему
+others.option.back=Назад
+others.log.info=Обрано інструмент інформації про систему
+
+security.queue.title=Оберіть інструменти безпеки роутера
+security.task.title=Оберіть утиліту
+security.error=Не вдалося обрати утиліту:
+security.warn.invalid=Неправильний вибір інструменту безпеки
+security.option.parental=Батьківський контроль
+security.option.antiscan=Захист роутера від атак (Antiscan)
+security.option.backup=Резервне копіювання конфігурації
+security.option.back=Назад
+security.log.parental=Обрано батьківський контроль
+security.log.antiscan=Обрано захист Antiscan
+security.log.backup=Обрано резервне копіювання конфігурації
+
+settings.queue.title=Оберіть налаштування застосунку
+settings.task.title=Оберіть налаштування
+settings.error=Не вдалося обрати налаштування:
+settings.warn.invalid=Неправильний вибір налаштування
+settings.option.logging=Режим журналювання
+settings.option.back=Назад
+settings.log.toggle=Режим журналювання: %v
+
+sysinfo.task.title=Інформація про систему
+sysinfo.summary.model=Модель
+sysinfo.summary.arch=Архітектура
+sysinfo.summary.memory=Пам'ять
+sysinfo.summary.uptime=Час роботи
+sysinfo.summary.hostname=Ім'я хоста
+sysinfo.summary.ip=IP-адреса
+sysinfo.summary.gateway=Шлюз
+sysinfo.summary.mac=MAC-адреса
+sysinfo.log.fetch=Отримання інформації про систему
+sysinfo.log.first=Перше звернення до системної інформації, завантажуємо дані...
+sysinfo.log.cache=Системна інформація закешована
+sysinfo.default=Невідомо
+
+loop.signal=Отримано сигнал завершення, вихід з %s
+loop.main=головного меню
+loop.category=циклу вибору категорії
+loop.network=циклу мережевих інструментів
+loop.others=циклу інших інструментів
+loop.security=циклу безпеки
+loop.settings=циклу налаштувань
+shutdown.log.start=Виконується плавне завершення роботи...
+
+cli.root.use=terem
+cli.root.short=Terem — інструмент керування роутером
+cli.root.long=Terem допомагає працювати з утилітами роутерів на entware/openwrt.\n\nВикористання:\n  terem           - запуск інтерактивного режиму\n  terem info      - показати інформацію про систему\n  terem [command] - виконати конкретну команду
+
+cli.network.short=Показати категорії мережевих інструментів
+cli.network.long=Показує всі мережеві інструменти, доступні в інтерактивному режимі
+
+cli.debug.short=Показати відладочну інформацію
+cli.debug.long=Записує до журналу відладочну інформацію: версії ПЗ, характеристики обладнання тощо.
+cli.debug.error=Не вдалося налаштувати журнал:
+cli.debug.write_error=Не вдалося записати повідомлення журналу:
+
+cli.info.short=Інформація про систему
+cli.info.long=Відображає детальну інформацію про систему: версії ПЗ, характеристики обладнання тощо.
+cli.info.header=== Інформація про систему ===
+cli.info.version=terem v1.0.0
+cli.info.go_version=Версія Go: %s
+cli.info.arch=Архітектура: %s
+
+info.loop=циклу інших інструментів
+
+cli.root.log.start=Запускається командний інтерфейс
+shutdown.signal=Отримано сигнал %v, розпочинаємо плавне завершення
+cli.info.arch.value=ARM (типовий цільовий пристрій для роутерів)
+
+# Конфігурація
+config.error.resolve_path=Не вдалося визначити шлях до конфігурації
+config.error.create_file=Не вдалося створити конфігураційний файл
+config.error.read_file=Не вдалося прочитати конфігураційний файл
+config.error.not_initialized=Конфігурацію не ініціалізовано
+config.error.path_missing=Шлях до конфігураційного файлу не задано
+
+# Утиліти
+utils.error.command=Не вдалося виконати команду '%s': %v
+utils.error.read_file=Не вдалося прочитати файл %s: %v
+utils.duration.days_hours_minutes=%d дн. %d год. %d хв.
+utils.duration.hours_minutes=%d год. %d хв.
+utils.duration.minutes=%d хв.
+
+# Системна інформація
+sysinfo.error.model=Не вдалося визначити модель роутера
+sysinfo.error.arch=Помилка отримання архітектури: %v
+sysinfo.error.mem_read=Помилка читання інформації про пам'ять: %v
+sysinfo.error.mem_missing=Не вдалося отримати інформацію про пам'ять
+sysinfo.error.uptime_read=Помилка читання uptime: %v
+sysinfo.error.uptime_format=Невірний формат uptime
+sysinfo.error.uptime_parse=Помилка розбору uptime: %v
+sysinfo.error.hostname=Не вдалося отримати ім'я хоста
+
+# Роутер
+router.error.command=Помилка виконання команди: %v, stderr: %s
+router.status.already_installed=%s вже встановлена
+router.status.install_error=Помилка встановлення %s: %v
+router.status.install_failed=Не вдалося встановити %s
+router.status.install_success=%s успішно встановлена
+router.error.system_info=Не вдалося отримати системну інформацію: %v
+router.error.memory_info=Не вдалося отримати інформацію про пам'ять: %v
+router.error.disk_info=Не вдалося отримати інформацію про диск: %v
+
+# Логер
+logger.error.force_rotate=Не вдалося виконати ротацію лога при SIGHUP
+logger.error.force_rotate_stderr=Не вдалося виконати ротацію лога при SIGHUP: %v
+logger.info.force_rotate=Ротацію лога при SIGHUP виконано
+logger.info.force_rotate_stderr=Ротацію лога при SIGHUP виконано
+
+# Мова
+language.warn.unsupported=Мова %q не підтримується, використовуємо російську

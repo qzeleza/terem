@@ -6,7 +6,7 @@ replace github.com/natefinch/lumberjack/v2 => gopkg.in/natefinch/lumberjack.v2 v
 
 require (
 	github.com/charmbracelet/lipgloss v1.1.0
-	github.com/qzeleza/termos v1.2.1
+	github.com/qzeleza/termos v1.2.2
 	github.com/rs/zerolog v1.34.0
 	github.com/spf13/cobra v1.10.1
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1

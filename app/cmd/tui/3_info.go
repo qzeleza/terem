@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/qzeleza/terem/internal/i18n"
 	"github.com/qzeleza/terem/internal/utils"
 	"github.com/qzeleza/termos"
 )
@@ -24,9 +25,9 @@ type SysInfoResult struct {
 func (ac *AppConfig) SysInfo(queue *termos.Queue) {
 
 	// Выводим информацию о системе
-	task := termos.NewFuncTask("Информация о системе",
+	task := termos.NewFuncTask(i18n.T("sysinfo.task.title"),
 		func() error {
-			ac.Log.Info("Получение информации о системе")
+			ac.Log.Info(i18n.T("sysinfo.log.fetch"))
 			// Используем кешированные данные
 			_ = ac.GetSysInfo()
 			return nil
@@ -34,19 +35,22 @@ func (ac *AppConfig) SysInfo(queue *termos.Queue) {
 		termos.WithSummaryFunction(func() []string {
 			// Получаем кешированные данные для отображения
 			info := ac.GetSysInfo()
+			divider := "────────────────────────────"
+			maxLength := 15
 			return []string{
-				fmt.Sprintf("%s", "───────────────────"),
-				fmt.Sprintf("Модель       : %s", info.Model),
-				fmt.Sprintf("Архитектура  : %s", info.Arch),
-				fmt.Sprintf("Память       : %d МБ / %d МБ (свободно: %d МБ)",
+				divider,
+				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.model"), maxLength), info.Model),
+				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.arch"), maxLength), info.Arch),
+				fmt.Sprintf("%s: %d/%d/%d Mb", utils.PadRight(i18n.T("sysinfo.summary.memory"), maxLength),
 					info.MemoryUsage.Total-info.MemoryUsage.Free,
 					info.MemoryUsage.Total,
 					info.MemoryUsage.Free),
-				fmt.Sprintf("Время работы : %s", utils.FormatUptime(info.Uptime)),
-				fmt.Sprintf("Доменное имя : %s", info.Hostname),
-				fmt.Sprintf("IP-адрес     : %s", info.IP),
-				fmt.Sprintf("Шлюз         : %s", info.Gateway),
-				fmt.Sprintf("MAC-адрес    : %s", info.MAC),
+				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.uptime"), maxLength), utils.FormatUptime(info.Uptime)),
+				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.hostname"), maxLength), info.Hostname),
+				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.ip"), maxLength), info.IP),
+				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.gateway"), maxLength), info.Gateway),
+				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.mac"), maxLength), info.MAC),
+				divider,
 			}
 		}),
 		termos.WithStopOnError(true),
@@ -59,14 +63,14 @@ func (ac *AppConfig) SysInfo(queue *termos.Queue) {
 func (ac *AppConfig) getSysInfo(result *SysInfoResult) {
 	// Инициализируем структуру с значениями по умолчанию
 	*result = SysInfoResult{
-		Model:       "Неизвестно",
-		Arch:        "Неизвестно",
+		Model:       i18n.T("sysinfo.default"),
+		Arch:        i18n.T("sysinfo.default"),
 		MemoryUsage: utils.RAMInfo{Total: 0, Free: 0},
 		Uptime:      time.Now(),
-		Hostname:    "Неизвестно",
-		IP:          "Неизвестно",
-		Gateway:     "Неизвестно",
-		MAC:         "Неизвестно",
+		Hostname:    i18n.T("sysinfo.default"),
+		IP:          i18n.T("sysinfo.default"),
+		Gateway:     i18n.T("sysinfo.default"),
+		MAC:         i18n.T("sysinfo.default"),
 	}
 
 	// Получаем модель роутера

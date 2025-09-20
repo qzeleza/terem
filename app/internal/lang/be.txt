@@ -1,0 +1,153 @@
+app.title=Тэрэм™
+app.name=terem
+
+menu.main.queue.title=Бібліятэка прыкладанняў для маршрутызатара
+menu.main.task.title=Выберыце рэжым працы
+menu.main.option.apps=Прыкладанні
+menu.main.option.settings=Налады
+menu.main.option.exit=Выхад
+menu.main.error=Не ўдалося выбраць рэжым працы:
+menu.main.loop=галоўнага меню
+menu.main.log.exit=Карыстальнік выбраў выхад
+
+category.security=Бяспека маршрутызатара
+category.network=Сеткавыя інструменты
+category.other=Іншыя інструменты
+category.back=Назад
+category.queue.title=Выберыце катэгорыю прыкладанняў
+category.task.title=Выбраць катэгорыю
+category.error=Памылка пры выбары катэгорыі:
+category.warn.invalid=Няправільны выбар катэгорыі
+
+network.queue.title=Выберыце сеткавы інструмент
+network.task.title=Абярыце сеткавы інструмент
+network.error=Не ўдалося выбраць сеткавы інструмент:
+network.warn.invalid=Няправільны выбар катэгорыі
+network.option.openssh=Сервер OpenSSH
+network.option.proxy=Сервер 3proxy
+network.option.dns=Сервер DNSmasq
+network.option.adguard=Сервер AdGuard Home
+network.option.back=Назад
+network.log.openssh=Выбраны сервер OpenSSH
+network.log.proxy=Выбраны сервер 3proxy
+network.log.dns=Выбраны сервер DNSmasq
+network.log.adguard=Выбраны сервер AdGuard Home
+
+others.queue.title=Выберыце іншыя інструменты
+others.task.title=Абярыце інструмент
+others.error=Не ўдалося выбраць інструмент:
+others.warn.invalid=Няправільны выбар катэгорыі
+others.option.info=Інфармацыя пра сістэму
+others.option.back=Назад
+others.log.info=Выбраны інструмент інфармацыі пра сістэму
+
+security.queue.title=Выберыце інструменты бяспекі маршрутызатара
+security.task.title=Абярыце ўтыліту
+security.error=Не ўдалося выбраць утыліту:
+security.warn.invalid=Няправільны выбар інструмента бяспекі
+security.option.parental=Бацькоўскі кантроль
+security.option.antiscan=Абарона маршрутызатара ад атак (Antiscan)
+security.option.backup=Рэзервовае капіраванне канфігурацыі
+security.option.back=Назад
+security.log.parental=Выбраны бацькоўскі кантроль
+security.log.antiscan=Выбраная абарона Antiscan
+security.log.backup=Выбрана рэзервовае капіраванне канфігурацыі
+
+settings.queue.title=Выберыце налады прыкладання
+settings.task.title=Абярыце налады
+settings.error=Не ўдалося выбраць налады:
+settings.warn.invalid=Няправільны выбар налад
+settings.option.logging=Рэжым журналавання
+settings.option.back=Назад
+settings.log.toggle=Рэжым журналавання: %v
+
+sysinfo.task.title=Інфармацыя пра сістэму
+sysinfo.summary.model=Мадэль
+sysinfo.summary.arch=Архітэктура
+sysinfo.summary.memory=Памяць
+sysinfo.summary.uptime=Час працы
+sysinfo.summary.hostname=Імя хаста
+sysinfo.summary.ip=IP-адрас
+sysinfo.summary.gateway=Шлюз
+sysinfo.summary.mac=MAC-адрас
+sysinfo.log.fetch=Атрыманне інфармацыі пра сістэму
+sysinfo.log.first=Першы запыт інфармацыі пра сістэму, загружаем дадзеныя...
+sysinfo.log.cache=Інфармацыя пра сістэму закэшавана
+sysinfo.default=Невядома
+
+loop.signal=Атрыманы сігнал завяршэння, выхад з %s
+loop.main=галоўнага меню
+loop.category=цыклу выбару катэгорыі
+loop.network=цыклу сеткавых інструментаў
+loop.others=цыклу іншых інструментаў
+loop.security=цыклу бяспекі
+loop.settings=цыклу налад
+shutdown.log.start=Запускаецца паступовае завяршэнне...
+
+cli.root.use=terem
+cli.root.short=Terem — інструмент кіравання маршрутызатарам
+cli.root.long=Terem дапамагае працаваць з утылітамі маршрутызатараў на entware/openwrt.\n\nВыкарыстанне:\n  terem           - запуск інтэрактыўнага рэжыму\n  terem info      - паказаць інфармацыю пра сістэму\n  terem [command] - выканаць канкрэтную каманду
+
+cli.network.short=Паказаць катэгорыі сеткавых інструментаў
+cli.network.long=Паказвае ўсе сеткавыя інструменты, даступныя ў інтэрактыўным рэжыме
+
+cli.debug.short=Паказаць адладкавую інфармацыю
+cli.debug.long=Запісвае ў журнал адладкавую інфармацыю: версіі ПЗ, звесткі пра абсталяванне і г.д.
+cli.debug.error=Не ўдалося наладзіць журнал:
+cli.debug.write_error=Не ўдалося запісаць паведамленне журнала:
+
+cli.info.short=Інфармацыя пра сістэму
+cli.info.long=Адлюстроўвае падрабязную інфармацыю пра сістэму: версіі ПЗ, характарыстыкі абсталявання і г.д.
+cli.info.header=== Інфармацыя пра сістэму ===
+cli.info.version=terem v1.0.0
+cli.info.go_version=Версія Go: %s
+cli.info.arch=Архітэктура: %s
+
+info.loop=цыклу іншых інструментаў
+
+cli.root.log.start=Запускаецца камандны інтэрфейс
+shutdown.signal=Атрыманы сігнал %v, запускаем паступовае завяршэнне
+cli.info.arch.value=ARM (прызначэнне па змаўчанні для маршрутызатараў)
+
+# Канфігурацыя
+config.error.resolve_path=Не атрымалася вызначыць шлях канфігурацыі
+config.error.create_file=Не атрымалася стварыць файл канфігурацыі
+config.error.read_file=Не атрымалася прачытаць файл канфігурацыі
+config.error.not_initialized=Канфігурацыя не ініцыялізаваная
+config.error.path_missing=Шлях да файла канфігурацыі не зададзены
+
+# Утыліты
+utils.error.command=Не атрымалася выканаць каманду '%s': %v
+utils.error.read_file=Не атрымалася прачытаць файл %s: %v
+utils.duration.days_hours_minutes=%d дз. %d гадз. %d хв.
+utils.duration.hours_minutes=%d гадз. %d хв.
+utils.duration.minutes=%d хв.
+
+# Сістэмная інфармацыя
+sysinfo.error.model=Не атрымалася вызначыць мадэль маршрутызатара
+sysinfo.error.arch=Памылка атрымання архітэктуры: %v
+sysinfo.error.mem_read=Памылка чытання звестак пра памяць: %v
+sysinfo.error.mem_missing=Не атрымалася атрымаць звесткі пра памяць
+sysinfo.error.uptime_read=Памылка чытання часу працы: %v
+sysinfo.error.uptime_format=Няправільны фармат часу працы
+sysinfo.error.uptime_parse=Памылка разбору часу працы: %v
+sysinfo.error.hostname=Не атрымалася атрымаць імя хаста
+
+# Маршрутызатар
+router.error.command=Памылка выканання каманды: %v, stderr: %s
+router.status.already_installed=%s ужо ўсталяваная
+router.status.install_error=Памылка ўсталявання %s: %v
+router.status.install_failed=Не атрымалася ўсталяваць %s
+router.status.install_success=%s паспяхова ўсталяваная
+router.error.system_info=Не атрымалася атрымаць сістэмную інфармацыю: %v
+router.error.memory_info=Не атрымалася атрымаць звесткі пра памяць: %v
+router.error.disk_info=Не атрымалася атрымаць звесткі пра дыск: %v
+
+# Логер
+logger.error.force_rotate=Не атрымалася выканаць ротацыю лога па SIGHUP
+logger.error.force_rotate_stderr=Не атрымалася выканаць ротацыю лога па SIGHUP: %v
+logger.info.force_rotate=Ротацыя лога па SIGHUP выканана
+logger.info.force_rotate_stderr=Ротацыя лога па SIGHUP выканана
+
+# Мова
+language.warn.unsupported=Мова %q не падтрымліваецца, выкарыстоўваем рускую

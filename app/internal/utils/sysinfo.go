@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/qzeleza/terem/internal/i18n"
 )
 
 // networkInfo структура для хранения сетевой информации
@@ -50,7 +52,7 @@ func GetRouterModel() (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("не удалось определить модель роутера")
+	return "", fmt.Errorf(i18n.T("sysinfo.error.model"))
 }
 
 // GetSystemArch получает архитектуру процессора
@@ -58,7 +60,7 @@ func GetSystemArch() (string, error) {
 	// Используем uname -m для получения архитектуры
 	arch, err := ExecuteCommand("uname -m")
 	if err != nil {
-		return "", fmt.Errorf("ошибка получения архитектуры: %v", err)
+		return "", fmt.Errorf(i18n.T("sysinfo.error.arch"), err)
 	}
 	return arch, nil
 }
@@ -70,7 +72,7 @@ func GetMemoryInfo() (RAMInfo, error) {
 	// Читаем /proc/meminfo
 	content, err := ReadFile("/proc/meminfo")
 	if err != nil {
-		return memInfo, fmt.Errorf("ошибка чтения информации о памяти: %v", err)
+		return memInfo, fmt.Errorf(i18n.T("sysinfo.error.mem_read"), err)
 	}
 
 	lines := strings.Split(content, "\n")
@@ -96,7 +98,7 @@ func GetMemoryInfo() (RAMInfo, error) {
 	}
 
 	if memInfo.Total == 0 {
-		return memInfo, fmt.Errorf("не удалось получить информацию о памяти")
+		return memInfo, fmt.Errorf(i18n.T("sysinfo.error.mem_missing"))
 	}
 
 	return memInfo, nil
@@ -107,20 +109,20 @@ func GetSystemUptime() (time.Time, error) {
 	// Читаем /proc/uptime
 	content, err := ReadFile("/proc/uptime")
 	if err != nil {
-		return time.Time{}, fmt.Errorf("ошибка чтения uptime: %v", err)
+		return time.Time{}, fmt.Errorf(i18n.T("sysinfo.error.uptime_read"), err)
 	}
 
 	// Первое число - время работы в секундах
 	fields := strings.Fields(content)
 	if len(fields) == 0 {
-		return time.Time{}, fmt.Errorf("неверный формат uptime")
+		return time.Time{}, fmt.Errorf(i18n.T("sysinfo.error.uptime_format"))
 	}
 
 	// Парсим секунды с плавающей точкой
 	uptimeStr := strings.Split(fields[0], ".")[0]
 	uptimeSeconds, err := strconv.ParseInt(uptimeStr, 10, 64)
 	if err != nil {
-		return time.Time{}, fmt.Errorf("ошибка парсинга uptime: %v", err)
+		return time.Time{}, fmt.Errorf(i18n.T("sysinfo.error.uptime_parse"), err)
 	}
 
 	// Вычисляем время запуска системы
@@ -145,15 +147,16 @@ func GetHostname() (string, error) {
 		return hostname, nil
 	}
 
-	return "", fmt.Errorf("не удалось получить имя хоста")
+	return "", fmt.Errorf(i18n.T("sysinfo.error.hostname"))
 }
 
 // GetNetworkInfo получает сетевую информацию
 func GetNetworkInfo() (*networkInfo, error) {
+	defaultValue := i18n.T("sysinfo.default")
 	info := &networkInfo{
-		IP:      "Неизвестно",
-		Gateway: "Неизвестно",
-		MAC:     "Неизвестно",
+		IP:      defaultValue,
+		Gateway: defaultValue,
+		MAC:     defaultValue,
 	}
 
 	// Получаем основной сетевой интерфейс и шлюз
@@ -208,7 +211,7 @@ func GetNetworkInfo() (*networkInfo, error) {
 	}
 
 	// Альтернативный способ через ifconfig (для старых систем)
-	if info.IP == "Неизвестно" || info.MAC == "Неизвестно" {
+	if info.IP == defaultValue || info.MAC == defaultValue {
 		if output, err := ExecuteCommand("ifconfig 2>/dev/null | grep -A1 'inet addr' | head -2"); err == nil {
 			lines := strings.Split(output, "\n")
 			for _, line := range lines {

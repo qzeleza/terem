@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"os/exec"
 	"time"
+
+	"github.com/qzeleza/terem/internal/i18n"
 )
 
 // Router представляет информацию о роутере
@@ -63,7 +65,7 @@ func (r Router) RunCommand(command string) (string, error) {
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
-		return "", fmt.Errorf("ошибка выполнения команды: %v, stderr: %s", err, stderr.String())
+		return "", fmt.Errorf(i18n.T("router.error.command"), err, stderr.String())
 	}
 
 	return stdout.String(), nil
@@ -78,24 +80,24 @@ func (r Router) CheckRequiredUtilities() []string {
 		// Проверяем наличие утилиты
 		_, err := r.RunCommand(fmt.Sprintf("which %s", util.Name))
 		if err == nil {
-			results = append(results, fmt.Sprintf("%s - уже установлена", util.Name))
+			results = append(results, fmt.Sprintf(i18n.T("router.status.already_installed"), util.Name))
 			continue
 		}
 
 		// Пытаемся установить утилиту
 		_, err = r.RunCommand(fmt.Sprintf("opkg update && opkg install %s", util.Package))
 		if err != nil {
-			results = append(results, fmt.Sprintf("%s - ошибка установки: %v", util.Name, err))
+			results = append(results, fmt.Sprintf(i18n.T("router.status.install_error"), util.Name, err))
 			continue
 		}
 
 		// Проверяем установку
 		if _, err := r.RunCommand(fmt.Sprintf("which %s", util.Name)); err != nil {
-			results = append(results, fmt.Sprintf("%s - не удалось установить", util.Name))
+			results = append(results, fmt.Sprintf(i18n.T("router.status.install_failed"), util.Name))
 			continue
 		}
 
-		results = append(results, fmt.Sprintf("%s - успешно установлена", util.Name))
+		results = append(results, fmt.Sprintf(i18n.T("router.status.install_success"), util.Name))
 	}
 
 	return results
@@ -108,21 +110,21 @@ func (r Router) GetSystemInfo() (map[string]string, error) {
 	// Получаем информацию о системе
 	output, err := r.RunCommand("uname -a")
 	if err != nil {
-		return nil, fmt.Errorf("не удалось получить информацию о системе: %v", err)
+		return nil, fmt.Errorf(i18n.T("router.error.system_info"), err)
 	}
 	info["system_info"] = output
 
 	// Получаем информацию о памяти
 	output, err = r.RunCommand("free -m")
 	if err != nil {
-		return nil, fmt.Errorf("не удалось получить информацию о памяти: %v", err)
+		return nil, fmt.Errorf(i18n.T("router.error.memory_info"), err)
 	}
 	info["memory"] = output
 
 	// Получаем информацию о диске
 	output, err = r.RunCommand("df -h")
 	if err != nil {
-		return nil, fmt.Errorf("не удалось получить информацию о диске: %v", err)
+		return nil, fmt.Errorf(i18n.T("router.error.disk_info"), err)
 	}
 	info["disk"] = output
 
