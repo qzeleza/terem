@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/signal"
 	"runtime/debug"
+	"syscall"
 
 	"github.com/qzeleza/terem/cmd/args"
 	"github.com/qzeleza/terem/cmd/tui"
@@ -18,8 +20,8 @@ func main() {
 	LOGFILE := fmt.Sprintf("/tmp/%s.log", APPNAME)
 	CONF := fmt.Sprintf("/opt/etc/%s/config.yaml", APPNAME)
 
-	// 1. Инициализируем конфигурацию приложени
-	ac, err := tui.NewSetup(APPNAME, VERSION, DEBUG)
+	// 1. Инициализируем конфигурацию приложения
+	ac, err := tui.NewSetup(APPNAME, VERSION, DEBUG, LOGFILE, CONF)
 	if err != nil {
 		fmt.Printf("Ошибка создания конфигурации: %v\n", err)
 		os.Exit(1)
@@ -29,7 +31,16 @@ func main() {
 	ac.LogFile = LOGFILE
 	ac.ConfFile = CONF
 
-	// 3. Восстановление паники в случае ошибки
+	// 3. Создаем корневой контекст для graceful shutdown
+	ctx, cancel := context.WithCancel(context.Background())
+	ac.RootCtx = ctx
+	ac.CancelFunc = cancel
+	defer cancel()
+
+	// 4. Настраиваем обработку сигналов для graceful shutdown
+	setupSignalHandler(cancel, ac)
+
+	// 5. Восстановление паники в случае ошибки
 	defer func() {
 		if r := recover(); r != nil {
 			msg := fmt.Sprintf("ПАНИКА: %v\n%s", r, debug.Stack())
@@ -44,16 +55,21 @@ func main() {
 		}
 	}()
 
-	// 4. Включаем обработчик SIGHUP
-	defer ac.Log.Close() // Закрываем логгер при завершении программы
-	select {} // приложение продолжает работать, ожидая SIGHUP
+	// 6. Закрываем логгер при завершении программы
+	defer ac.Log.Close()
+
+	// 7. Запускаем приложение c обработкой аргументов командной строки
+	args.Execute(ac)
 }
 
-	// 4. Создаем корневой контекст для graceful shutdown
-	var rootCancel context.CancelFunc
-	ac.RootCtx, rootCancel = context.WithCancel(context.Background())
-	defer rootCancel()
+// setupSignalHandler настраивает обработку сигналов для graceful shutdown
+func setupSignalHandler(cancel context.CancelFunc, ac *tui.AppConfig) {
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
 
-	// 5. Запускаем приложение c обработкой аргументов командной строки
-	args.Execute(ac)
+	go func() {
+		sig := <-signalChan
+		ac.Log.Info(fmt.Sprintf("Получен сигнал %v, начинаем graceful shutdown", sig))
+		cancel()
+	}()
 }

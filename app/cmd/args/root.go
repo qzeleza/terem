@@ -31,20 +31,27 @@ var rootCmd = &cobra.Command{
 		// Запускаем интерактивный режим, в случае если запущена без аргументов
 		if len(args) == 0 {
 
-			// Запускаем бесконечный цикл
-			// для выбора режима работы
-			for {
+			// Запускаем главный цикл с автоматической проверкой контекста
+			AppConfig.ContextualLoop(func() bool {
 				AppConfig.SelectMainMenu()
+
+				// Проверяем контекст после выбора меню
+				if AppConfig.IsContextCancelled() {
+					return false
+				}
+
 				switch AppConfig.Mode {
 				case "Приложения":
 					AppConfig.SelectCategoryLoop()
 				case "Настройки":
-					AppConfig.SelectSettings()
+					AppConfig.SelectSettingsLoop()
 				case "Выход":
-					os.Exit(0)
-					return
+					AppConfig.Log.Info("Пользователь выбрал выход")
+					return false
 				}
-			}
+
+				return true // продолжить главный цикл
+			}, "главного меню")
 		}
 	},
 }

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -15,32 +16,42 @@ const (
 	defaultConfigDirectory = "terem"
 	defaultConfigFile      = "config.yaml"
 	configEnvVariable      = "TEREM_CONFIG"
+	defaultLogFilePath     = "/tmp/terem.log"
 )
 
-// Config описывает настройки приложения. Та же структура сериализуется в YAML-файл.
+// Config описывает настройки приложения. Та же структура сохраняется в YAML.
 type Config struct {
-	DebugMode bool   `yaml:"debugMode"`
-	LogFile   string `yaml:"logFile"`
+	DebugMode bool   `yaml:"debugMode" json:"debugMode"` // Режим отладки
+	LogFile   string `yaml:"logFile" json:"logFile"`     // Путь до файла логов
 }
 
-// Load возвращает конфигурацию (с учётом дефолтов) и путь до файла конфигурации.
-// Если файл отсутствует — создаёт его с настройками по умолчанию в YAML-формате.
+// Load загружает конфигурацию и гарантирует наличие файлов/директорий.
+// Если путь недоступен, используетсяFallback в /tmp.
 // explicitPath — явный путь до файла конфигурации.
 func Load(explicitPath string) (*Config, string, error) {
 	cfg := defaultConfig()
 
-	// Определение пути конфигурации
 	path, err := resolveConfigPath(explicitPath)
 	if err != nil {
 		return nil, "", fmt.Errorf("определение пути конфигурации: %w", err)
 	}
 
-	if err := ensureConfigFile(path, cfg); err != nil {
+	path, err = ensureConfigFile(path, cfg)
+	if err != nil {
 		return nil, "", fmt.Errorf("создание конфигурационного файла: %w", err)
 	}
 
-	if err := mergeConfigFromFile(path, cfg); err != nil {
+	changedByMerge, err := mergeConfigFromFile(path, cfg)
+	if err != nil {
 		return nil, "", fmt.Errorf("чтение конфигурационного файла: %w", err)
+	}
+
+	previousLogPath := cfg.LogFile
+	cfg.LogFile = ensureLogFilePath(cfg.LogFile)
+	logPathAdjusted := cfg.LogFile != previousLogPath
+
+	if changedByMerge || logPathAdjusted {
+		_ = writeConfigFile(path, cfg)
 	}
 
 	return cfg, path, nil
@@ -56,7 +67,7 @@ func MustLoad(explicitPath string) *Config {
 	return cfg
 }
 
-// SetDebugMode обновляет значение debugMode и сразу отражает его в структуре.
+// SetDebugMode обновляет значение debugMode.
 // v — новое значение debugMode.
 func (c *Config) SetDebugMode(v bool) {
 	if c == nil {
@@ -71,14 +82,14 @@ func (c *Config) SetLogFile(path string) {
 	if c == nil {
 		return
 	}
-	c.LogFile = path
+	c.LogFile = ensureLogFilePath(path)
 }
 
 // defaultConfig возвращает конфигурацию по умолчанию.
 func defaultConfig() *Config {
 	return &Config{
 		DebugMode: utils.GetEnvBool("DEBUG", true),
-		LogFile:   utils.GetEnv("TEREM_LOG_FILE", "/tmp/terem.log"),
+		LogFile:   utils.GetEnv("TEREM_LOG_FILE", defaultLogFilePath),
 	}
 }
 
@@ -102,49 +113,117 @@ func resolveConfigPath(explicit string) (string, error) {
 // ensureConfigFile создает конфигурационный файл, если он отсутствует.
 // path — путь до файла конфигурации.
 // cfg — конфигурация.
-func ensureConfigFile(path string, cfg *Config) error {
-	if _, err := os.Stat(path); err == nil {
+func ensureConfigFile(path string, cfg *Config) (string, error) {
+	candidate := path
+
+	if err := ensureDirectory(filepath.Dir(candidate)); err != nil {
+		candidate = fallbackConfigPath(candidate)
+		if err := ensureDirectory(filepath.Dir(candidate)); err != nil {
+			return "", err
+		}
+	}
+
+	if _, err := os.Stat(candidate); err != nil {
+		if !errors.Is(err, os.ErrNotExist) {
+			candidate = fallbackConfigPath(candidate)
+			if err := ensureDirectory(filepath.Dir(candidate)); err != nil {
+				return "", err
+			}
+		}
+		if err := writeConfigFile(candidate, cfg); err != nil {
+			candidate = fallbackConfigPath(candidate)
+			if err := writeConfigFile(candidate, cfg); err != nil {
+				return "", err
+			}
+		}
+	}
+
+	return candidate, nil
+}
+
+// ensureDirectory создает директорию, если она отсутствует.
+// dir — директория.
+func ensureDirectory(dir string) error {
+	if dir == "" || dir == "." {
 		return nil
-	} else if !errors.Is(err, os.ErrNotExist) {
-		return err
 	}
+	return os.MkdirAll(dir, 0o755)
+}
 
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		return err
-	}
-
-	return writeConfigFile(path, cfg)
+// fallbackConfigPath возвращает путь до файла конфигурации в директории /tmp.
+// original — оригинальный путь до файла конфигурации.
+func fallbackConfigPath(original string) string {
+	base := filepath.Base(original)
+	return filepath.Join(os.TempDir(), base)
 }
 
 // mergeConfigFromFile загружает конфигурацию из файла.
 // path — путь до файла конфигурации.
 // cfg — конфигурация.
-func mergeConfigFromFile(path string, cfg *Config) error {
-	// Чтение файла конфигурации
+func mergeConfigFromFile(path string, cfg *Config) (bool, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return err
+		return false, err
 	}
 
-	// Разбор файла конфигурации
 	var fileCfg Config
 	if err := yaml.Unmarshal(data, &fileCfg); err != nil {
-		return err
+		return false, err
 	}
 
-	// Обновление конфигурации
+	originalDebug := cfg.DebugMode
+	originalLog := cfg.LogFile
+
+	cfg.DebugMode = fileCfg.DebugMode
 	if fileCfg.LogFile != "" {
 		cfg.LogFile = fileCfg.LogFile
 	}
-	cfg.DebugMode = fileCfg.DebugMode
 
-	return nil
+	changed := originalDebug != cfg.DebugMode || originalLog != cfg.LogFile
+	return changed, nil
+}
+
+// ensureLogFilePath создает директорию для файла логов, если она отсутствует.
+// path — путь до файла логов.
+func ensureLogFilePath(path string) string {
+	candidate := path
+	if candidate == "" {
+		candidate = defaultLogFilePath
+	}
+
+	dir := filepath.Dir(candidate)
+	if dir == "" || dir == "." {
+		candidate = filepath.Join(os.TempDir(), filepath.Base(candidate))
+		dir = filepath.Dir(candidate)
+	}
+
+	if err := ensureDirectory(dir); err != nil {
+		candidate = filepath.Join(os.TempDir(), filepath.Base(candidate))
+		_ = ensureDirectory(filepath.Dir(candidate))
+	}
+
+	if f, err := os.OpenFile(candidate, os.O_CREATE|os.O_APPEND, 0o644); err == nil {
+		_ = f.Close()
+		return candidate
+	}
+
+	fallback := filepath.Join(os.TempDir(), filepath.Base(candidate))
+	_ = ensureDirectory(filepath.Dir(fallback))
+	if f, err := os.OpenFile(fallback, os.O_CREATE|os.O_APPEND, 0o644); err == nil {
+		_ = f.Close()
+		return fallback
+	}
+
+	return candidate
 }
 
 // writeConfigFile записывает конфигурацию в файл.
 // path — путь до файла конфигурации.
 // cfg — конфигурация.
 func writeConfigFile(path string, cfg *Config) error {
+	if err := ensureDirectory(filepath.Dir(path)); err != nil {
+		return err
+	}
 	data, err := yaml.Marshal(cfg)
 	if err != nil {
 		return err
@@ -152,7 +231,13 @@ func writeConfigFile(path string, cfg *Config) error {
 	return os.WriteFile(path, data, 0o644)
 }
 
-// Save перезаписывает конфигурационный файл.
+// MarshalJSON сериализует конфигурацию в JSON.
+func (c *Config) MarshalJSON() ([]byte, error) {
+	type alias Config
+	return json.Marshal((*alias)(c))
+}
+
+// Save записывает конфигурацию в файл.
 // path — путь до файла конфигурации.
 func (c *Config) Save(path string) error {
 	if c == nil {
@@ -161,5 +246,12 @@ func (c *Config) Save(path string) error {
 	if path == "" {
 		return errors.New("путь к файлу не указан")
 	}
+
+	path, err := ensureConfigFile(path, c)
+	if err != nil {
+		return err
+	}
+
+	c.LogFile = ensureLogFilePath(c.LogFile)
 	return writeConfigFile(path, c)
 }

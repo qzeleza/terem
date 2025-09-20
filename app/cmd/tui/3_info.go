@@ -22,30 +22,31 @@ type SysInfoResult struct {
 
 // SysInfo выводит информацию о системе
 func (ac *AppConfig) SysInfo(queue *termos.Queue) {
-	// Создаем переменную для хранения результата
-	var result SysInfoResult
 
 	// Выводим информацию о системе
 	task := termos.NewFuncTask("Информация о системе",
 		func() error {
 			ac.Log.Info("Получение информации о системе")
-			getSysInfo(&result)
+			// Используем кешированные данные
+			_ = ac.GetSysInfo()
 			return nil
 		},
 		termos.WithSummaryFunction(func() []string {
+			// Получаем кешированные данные для отображения
+			info := ac.GetSysInfo()
 			return []string{
-				fmt.Sprintf("───────────────────"),
-				fmt.Sprintf("Модель       : %s", result.Model),
-				fmt.Sprintf("Архитектура  : %s", result.Arch),
+				fmt.Sprintf("%s", "───────────────────"),
+				fmt.Sprintf("Модель       : %s", info.Model),
+				fmt.Sprintf("Архитектура  : %s", info.Arch),
 				fmt.Sprintf("Память       : %d МБ / %d МБ (свободно: %d МБ)",
-					result.MemoryUsage.Total-result.MemoryUsage.Free,
-					result.MemoryUsage.Total,
-					result.MemoryUsage.Free),
-				fmt.Sprintf("Время работы : %s", utils.FormatUptime(result.Uptime)),
-				fmt.Sprintf("Доменное имя : %s", result.Hostname),
-				fmt.Sprintf("IP-адрес     : %s", result.IP),
-				fmt.Sprintf("Шлюз         : %s", result.Gateway),
-				fmt.Sprintf("MAC-адрес    : %s", result.MAC),
+					info.MemoryUsage.Total-info.MemoryUsage.Free,
+					info.MemoryUsage.Total,
+					info.MemoryUsage.Free),
+				fmt.Sprintf("Время работы : %s", utils.FormatUptime(info.Uptime)),
+				fmt.Sprintf("Доменное имя : %s", info.Hostname),
+				fmt.Sprintf("IP-адрес     : %s", info.IP),
+				fmt.Sprintf("Шлюз         : %s", info.Gateway),
+				fmt.Sprintf("MAC-адрес    : %s", info.MAC),
 			}
 		}),
 		termos.WithStopOnError(true),
@@ -55,7 +56,7 @@ func (ac *AppConfig) SysInfo(queue *termos.Queue) {
 }
 
 // getSysInfo получает информацию о системе роутера
-func getSysInfo(result *SysInfoResult) {
+func (ac *AppConfig) getSysInfo(result *SysInfoResult) {
 	// Инициализируем структуру с значениями по умолчанию
 	*result = SysInfoResult{
 		Model:       "Неизвестно",

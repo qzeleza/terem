@@ -12,18 +12,26 @@ var settingsList = []string{
 
 // SelectSettingsLoop отображает меню настроек приложения
 func (ac *AppConfig) SelectSettingsLoop() {
-	for {
+	ac.ContextualLoop(func() bool {
 		ac.SelectSettings()
+
+		// Проверяем контекст после выбора
+		if ac.IsContextCancelled() {
+			return false
+		}
+
 		switch ac.Category {
 		case settingsList[0]: // Режим логирования
 			ac.SetDebugMode()
+			// После выполнения действия показываем меню снова
+			return true
 		case settingsList[1]: // Назад
-			return
+			return false
 		default:
 			ac.Log.Warn("Неверный выбор настройки")
-			return
+			return false
 		}
-	}
+	}, "настроек")
 }
 
 func (ac *AppConfig) SelectSettings() {
@@ -34,8 +42,8 @@ func (ac *AppConfig) SelectSettings() {
 		WithTitleColor(ac.AppTitleColor, true).
 		WithClearScreen(true)
 
-	// Создаем задачу для выбора пункта меню
-	menuTask := termos.NewSingleSelectTask("Выбор настроек", settingsList)
+	// Создаем задачу для выбора пункта меню с запоминанием последней позиции
+	menuTask := termos.NewSingleSelectTask("Выбор настроек", settingsList).WithDefaultItem(ac.LastSettingsIndex)
 	setupQueue.AddTasks(menuTask)
 
 	// Запускаем выбор режима
@@ -43,7 +51,9 @@ func (ac *AppConfig) SelectSettings() {
 		ac.Log.Fatal("Ошибка при выборе настроек:", err)
 	}
 
-	// ac.Settings = settingsList[menuTask.GetSelectedIndex()]
+	// Сохраняем выбранный индекс и устанавливаем категорию
+	ac.LastSettingsIndex = menuTask.GetSelectedIndex()
+	ac.Category = settingsList[menuTask.GetSelectedIndex()]
 }
 
 func (ac *AppConfig) SetDebugMode() {

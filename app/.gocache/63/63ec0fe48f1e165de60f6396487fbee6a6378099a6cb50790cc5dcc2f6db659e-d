@@ -1,9 +1,0 @@
-./base.go
-./func_task.go
-./input_renderer.go
-./input_task.go
-./multiselect_task.go
-./singleselect_task.go
-./timeout_manager.go
-./with_newlines.go
-./yesno_task.go

@@ -13,8 +13,14 @@ var categoryList = []string{
 
 // SelectCategory отображает меню для выбора категории приложений
 func (ac *AppConfig) SelectCategoryLoop() {
-	for {
+	ac.ContextualLoop(func() bool {
 		ac.SelectCategoryFromList()
+
+		// Проверяем контекст после выбора
+		if ac.IsContextCancelled() {
+			return false
+		}
+
 		switch ac.Category {
 		case categoryList[0]: // Безопасность роутера
 			ac.SecurityCategoryLoop()
@@ -23,12 +29,15 @@ func (ac *AppConfig) SelectCategoryLoop() {
 		case categoryList[2]: // Прочие утилиты
 			ac.OtherCategoryLoop()
 		case categoryList[3]: // Выход
-			return
+			return false
 		default:
 			ac.Log.Warn("Неверный выбор категории")
-			return
+			return false
 		}
-	}
+
+		// После возврата из подменю показываем меню категорий снова
+		return true
+	}, "выбора категории приложений")
 }
 
 // SelectCategory отображает меню для выбора категории приложений
@@ -40,8 +49,8 @@ func (ac *AppConfig) SelectCategoryFromList() {
 		WithTitleColor(ac.AppTitleColor, true).
 		WithClearScreen(true)
 
-	// Создаем задачу для выбора пункта меню
-	menuTask := termos.NewSingleSelectTask("Выбор категории", categoryList)
+	// Создаем задачу для выбора пункта меню с запоминанием последней позиции
+	menuTask := termos.NewSingleSelectTask("Выбор категории", categoryList).WithDefaultItem(ac.LastCategoryIndex)
 	setupQueue.AddTasks(menuTask)
 
 	// Запускаем выбор режима
@@ -49,5 +58,7 @@ func (ac *AppConfig) SelectCategoryFromList() {
 		ac.Log.Fatal("Ошибка при выборе категории:", err)
 	}
 
+	// Сохраняем выбранный индекс и устанавливаем категорию
+	ac.LastCategoryIndex = menuTask.GetSelectedIndex()
 	ac.Category = categoryList[menuTask.GetSelectedIndex()]
 }

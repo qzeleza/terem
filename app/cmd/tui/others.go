@@ -6,26 +6,40 @@ import (
 	"github.com/qzeleza/termos"
 )
 
-// otherList содержит список прочих приложений
-var otherList = map[string]string{
-	"info": "Информация о системе",
-	"quit": "Назад",
+// otherList содержит список прочих приложений в фиксированном порядке
+var otherList = []string{
+	"Информация о системе",
+	"Назад",
+}
+
+// otherKeys соответствующие ключи для otherList
+var otherKeys = []string{
+	"info",
+	"quit",
 }
 
 // OtherCategoryLoop запускает цикл для выбора прочих приложений
 func (ac *AppConfig) OtherCategoryLoop() {
-	for {
+	ac.ContextualLoop(func() bool {
 		ac.SelectOtherCategory()
+
+		// Проверяем контекст после выбора
+		if ac.IsContextCancelled() {
+			return false
+		}
+
 		switch ac.Category {
-		case otherList["info"]: // Информация о системе
+		case otherList[0]: // Информация о системе
 			ac.SelectInfoApp()
-		case otherList["exit"]: // Выход
-			return
+			// После выполнения действия показываем меню снова
+			return true
+		case otherList[1]: // Назад
+			return false
 		default:
 			ac.Log.Warn("Неверный выбор категории")
-			return
+			return false
 		}
-	}
+	}, "цикла прочих приложений")
 }
 
 // SelectOtherCategory отображает меню для выбора прочих приложений
@@ -37,14 +51,8 @@ func (ac *AppConfig) SelectOtherCategory() {
 		WithTitleColor(ac.AppTitleColor, true).
 		WithClearScreen(true)
 
-	// Создаем список для выбора
-	list := []string{}
-	for _, v := range otherList {
-		list = append(list, v)
-	}
-
-	// Создаем задачу для выбора пункта меню
-	menuTask := termos.NewSingleSelectTask("Выбор приложения", list)
+	// Создаем задачу для выбора пункта меню с запоминанием последней позиции
+	menuTask := termos.NewSingleSelectTask("Выбор приложения", otherList).WithDefaultItem(ac.LastOthersIndex)
 	setupQueue.AddTasks(menuTask)
 
 	// Запускаем выбор режима
@@ -52,7 +60,9 @@ func (ac *AppConfig) SelectOtherCategory() {
 		log.Fatal("Ошибка при выборе приложения:", err)
 	}
 
-	ac.SelectedUtil.Description = list[menuTask.GetSelectedIndex()]
+	// Сохраняем выбранный индекс и устанавливаем категорию
+	ac.LastOthersIndex = menuTask.GetSelectedIndex()
+	ac.Category = otherList[menuTask.GetSelectedIndex()]
 }
 
 // SelectInfoApp отображает меню для выбора утилит для работы с файловой системой
