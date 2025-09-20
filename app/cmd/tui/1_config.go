@@ -3,12 +3,11 @@ package tui
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/charmbracelet/lipgloss"
 	conf "github.com/qzeleza/terem/internal/config"
+	log "github.com/qzeleza/terem/internal/zlog"
 	"github.com/qzeleza/termos"
-	log "github.com/qzeleza/zlogger"
 )
 
 type SelectedApp struct {
@@ -22,7 +21,7 @@ type AppConfig struct {
 	AppTitleColor lipgloss.TerminalColor
 	AppTitle      string
 	LogFile       string
-	SockFile      string
+	ConfFile      string
 	Conf          conf.Config
 	Log           log.Logger
 	RootCtx       context.Context
@@ -33,16 +32,29 @@ type AppConfig struct {
 	SelectedUtil  SelectedApp
 }
 
-func NewSetup(appName string, version string) (*AppConfig, error) {
+func NewSetup(appName string, version string, debug bool) (*AppConfig, error) {
+	// Загружаем конфигурацию
+	defaultConfPath := fmt.Sprintf("/opt/etc/%s/config.yaml", appName)
+	confData, resolvedPath, err := conf.Load(defaultConfPath)
+	if err != nil {
+		return nil, err
+	}
+
+	// Определяем путь до файла логов
+	logFile := fmt.Sprintf("/tmp/%s.log", appName)
+	if confData.LogFile != "" {
+		logFile = confData.LogFile
+	}
+
 	ac := &AppConfig{
 		AppName:       appName,
 		AppTitleColor: termos.GreenBright,
 		AppTitle:      "Терем™",
-		LogFile:       fmt.Sprintf("/tmp/%s.log", appName),
-		SockFile:      fmt.Sprintf("/tmp/%s.sock", appName),
-		Conf:          *conf.New(),
+		LogFile:       logFile,
+		ConfFile:      resolvedPath,
+		Conf:          *confData,
 		Version:       version,
-		Debug:         false,
+		Debug:         debug,
 		SelectedUtil: SelectedApp{
 			Name:        "",
 			Description: "",
@@ -58,31 +70,13 @@ func NewSetup(appName string, version string) (*AppConfig, error) {
 }
 
 func (ac *AppConfig) SetupLogger() error {
+	logger := log.New(ac.LogFile)
 
-	// Создаем конфигурацию с настройками по умолчанию
-	logConfig := log.NewConfig(ac.LogFile, ac.SockFile)
-
-	// Настраиваем дополнительные параметры
-	if ac.Conf.DebugMode == "true" || ac.Debug {
-		logConfig.Level = log.DEBUG.String()
+	if ac.Conf.DebugMode || ac.Debug {
+		logger.SetLevel(log.DebugLevel)
 	} else {
-		logConfig.Level = log.INFO.String()
+		logger.SetLevel(log.InfoLevel)
 	}
-	logConfig.MaxFileSize = 50                // максимальный размер файла логов
-	logConfig.BufferSize = 500                // размер буфера
-	logConfig.FlushInterval = 2 * time.Second // интервал обновления буфера
-
-	// Создаем логгер для основного приложения
-	logger, err := log.New(logConfig, "MAIN")
-	if err != nil {
-		return err
-	}
-	defer func() {
-		if err := logger.Close(); err != nil {
-			ac.Log.Error("Ошибка при закрытии логгера:", err)
-		}
-	}()
-
 	ac.Log = *logger
 
 	return nil

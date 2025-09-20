@@ -50,10 +50,7 @@ func (ac *AppConfig) SelectSecurityApp() {
 
 	// Запускаем выбор режима
 	if err := setupQueue.Run(); err != nil {
-		err := ac.Log.Fatal("Ошибка при выборе утилиты:", err)
-		if err != nil {
-			ac.Log.Error("Ошибка при выводе сообщения:", err)
-		}
+		ac.Log.Fatal("Ошибка при выборе утилиты:", err)
 	}
 
 	ac.Mode = list[menuTask.GetSelectedIndex()]
@@ -61,24 +58,15 @@ func (ac *AppConfig) SelectSecurityApp() {
 
 // SelectParentalControl отображает меню для выбора утилит для работы с файловой системой
 func (ac *AppConfig) SelectParentalControl() {
-	err := ac.Log.Info("Выбран родительский контроль")
-	if err != nil {
-		ac.Log.Error("Ошибка при выводе сообщения:", err)
-	}
+	ac.Log.Info("Выбран родительский контроль")
 }
 
 // SelectAntiscan отображает меню для выбора утилит для работы с файловой системой
 func (ac *AppConfig) SelectAntiscan() {
-	err := ac.Log.Info("Выбрана защита роутера от атак Antiscan")
-	if err != nil {
-		ac.Log.Error("Ошибка при выводе сообщения:", err)
-	}
+	ac.Log.Info("Выбрана защита роутера от атак Antiscan")
 }
 
 // SelectAntiscan отображает меню для выбора утилит для работы с файловой системой
 func (ac *AppConfig) SelectBackup() {
-	err := ac.Log.Info("Выбрано резервное копирование конфигурации")
-	if err != nil {
-		ac.Log.Error("Ошибка при выводе сообщения:", err)
-	}
+	ac.Log.Info("Выбрано резервное копирование конфигурации")
 }

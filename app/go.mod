@@ -2,11 +2,15 @@ module github.com/qzeleza/terem
 
 go 1.25.0
 
+replace github.com/natefinch/lumberjack/v2 => gopkg.in/natefinch/lumberjack.v2 v2.2.1
+
 require (
 	github.com/charmbracelet/lipgloss v1.1.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	github.com/qzeleza/termos v1.2.0
-	github.com/qzeleza/zlogger v1.0.2
+	github.com/rs/zerolog v1.34.0
 	github.com/spf13/cobra v1.10.1
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -21,6 +25,7 @@ require (
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect

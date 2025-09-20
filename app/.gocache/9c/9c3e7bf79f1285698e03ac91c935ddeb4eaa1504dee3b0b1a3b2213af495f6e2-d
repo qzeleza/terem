@@ -1,0 +1,8 @@
+./1_config.go
+./2_menu.go
+./3_info.go
+./4_apps.go
+./5_settings.go
+./network.go
+./others.go
+./security.go

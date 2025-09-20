@@ -26,10 +26,7 @@ func (ac *AppConfig) NetworkCategoryLoop() {
 		case networkList["exit"]: // Выход
 			return
 		default:
-			err := ac.Log.Warn("Неверный выбор категории")
-			if err != nil {
-				ac.Log.Error("Ошибка при выводе сообщения:", err)
-			}
+			ac.Log.Warn("Неверный выбор категории")
 			return
 		}
 	}
@@ -56,10 +53,7 @@ func (ac *AppConfig) SelectNetworkCategory() {
 
 	// Запускаем выбор режима
 	if err := setupQueue.Run(); err != nil {
-		err := ac.Log.Fatal("Ошибка при выборе сетевого приложения:", err)
-		if err != nil {
-			ac.Log.Error("Ошибка при выводе сообщения:", err)
-		}
+		ac.Log.Fatal("Ошибка при выборе сетевого приложения:", err)
 	}
 
 	ac.Category = list[menuTask.GetSelectedIndex()]
@@ -67,24 +61,15 @@ func (ac *AppConfig) SelectNetworkCategory() {
 
 // SelectProxyApp отображает меню для выбора прокси сервера
 func (ac *AppConfig) SelectProxyApp() {
-	err := ac.Log.Info("Выбран прокси сервер 3proxy")
-	if err != nil {
-		ac.Log.Error("Ошибка при выводе сообщения:", err)
-	}
+	ac.Log.Info("Выбран прокси сервер 3proxy")
 }
 
 // SelectDNSApp отображает меню для выбора DNS-сервера
 func (ac *AppConfig) SelectDNSApp() {
-	err := ac.Log.Info("Выбран DNSmasq-сервер")
-	if err != nil {
-		ac.Log.Error("Ошибка при выводе сообщения:", err)
-	}
+	ac.Log.Info("Выбран DNSmasq-сервер")
 }
 
 // SelectAdGuardApp отображает меню для выбора AdGuard Home сервера
 func (ac *AppConfig) SelectAdGuardApp() {
-	err := ac.Log.Info("Выбран AdGuard Home сервер")
-	if err != nil {
-		ac.Log.Error("Ошибка при выводе сообщения:", err)
-	}
+	ac.Log.Info("Выбран AdGuard Home сервер")
 }
