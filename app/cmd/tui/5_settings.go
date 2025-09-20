@@ -53,6 +53,12 @@ func (ac *AppConfig) SelectSettings() {
 		ac.Log.Fatal(i18n.T("settings.error"), err)
 	}
 
+	// Если пользователь отменил выбор, возвращаемся в предыдущее меню
+	if menuTask.HasError() {
+		ac.Category = SettingsOptionBack
+		return
+	}
+
 	// Сохраняем выбранный индекс и устанавливаем категорию
 	selected := menuTask.GetSelectedIndex()
 	ac.LastSettingsIndex = selected

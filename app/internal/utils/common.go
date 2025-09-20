@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/qzeleza/terem/internal/i18n"
 )
@@ -94,21 +95,18 @@ func GetEnvBool(key string, defaultValue bool) bool {
 //   - строка, дополненная пробелами до указанной ширины
 //   - если исходная строка длиннее или равна width, возвращается исходная строка
 func PadRight(s string, width int) string {
-	// Если строка уже нужной длины или длиннее, возвращаем как есть
-	if len(s) >= width {
+	// Если строка уже нужной длины (по количеству рун) или длиннее, возвращаем как есть
+	if utf8.RuneCountInString(s) >= width {
 		return s
 	}
 
-	// Создаем слайс байт нужной длины
-	result := make([]byte, width)
-
-	// Копируем исходную строку
-	copy(result, s)
-
-	// Заполняем оставшееся место пробелами
-	for i := len(s); i < width; i++ {
-		result[i] = ' '
+	var builder strings.Builder
+	padding := width - utf8.RuneCountInString(s)
+	builder.Grow(len(s) + padding)
+	builder.WriteString(s)
+	for i := 0; i < padding; i++ {
+		builder.WriteByte(' ')
 	}
 
-	return string(result)
+	return builder.String()
 }

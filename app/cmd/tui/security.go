@@ -70,6 +70,12 @@ func (ac *AppConfig) SelectSecurityApp() {
 		ac.Log.Fatal(i18n.T("security.error"), err)
 	}
 
+	// Если пользователь отменил выбор, возвращаемся в предыдущее меню
+	if menuTask.HasError() {
+		ac.Mode = SecurityOptionBack
+		return
+	}
+
 	// Сохраняем выбранный индекс и устанавливаем режим
 	selected := menuTask.GetSelectedIndex()
 	ac.LastSecurityIndex = selected

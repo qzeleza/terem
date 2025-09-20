@@ -62,6 +62,12 @@ func (ac *AppConfig) SelectOtherCategory() {
 		log.Fatal(i18n.T("others.error"), err)
 	}
 
+	// Если пользователь отменил выбор, возвращаемся к предыдущему меню
+	if menuTask.HasError() {
+		ac.Category = OtherOptionBack
+		return
+	}
+
 	// Сохраняем выбранный индекс и устанавливаем категорию
 	selected := menuTask.GetSelectedIndex()
 	ac.LastOthersIndex = selected

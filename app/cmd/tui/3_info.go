@@ -50,7 +50,7 @@ func (ac *AppConfig) SysInfo(queue *termos.Queue) {
 				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.ip"), maxLength), info.IP),
 				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.gateway"), maxLength), info.Gateway),
 				fmt.Sprintf("%s: %s", utils.PadRight(i18n.T("sysinfo.summary.mac"), maxLength), info.MAC),
-				divider,
+				// divider,
 			}
 		}),
 		termos.WithStopOnError(true),

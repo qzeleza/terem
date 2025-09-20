@@ -41,6 +41,13 @@ func (ac *AppConfig) SelectMainMenu() {
 	if err := setupQueue.Run(); err != nil {
 		log.Fatal(i18n.T("menu.main.error"), err)
 	}
+
+	// Если пользователь отменил выбор (стрелка влево/ESC), выходим в основное меню
+	if menuTask.HasError() {
+		ac.Mode = ModeExit
+		return
+	}
+
 	// Сохраняем выбранный индекс и устанавливаем режим
 	selected := menuTask.GetSelectedIndex()
 	ac.LastMainMenuIndex = selected

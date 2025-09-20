@@ -75,6 +75,12 @@ func (ac *AppConfig) SelectNetworkCategory() {
 		ac.Log.Fatal(i18n.T("network.error"), err)
 	}
 
+	// Если пользователь отменил выбор, возвращаемся к предыдущему меню
+	if menuTask.HasError() {
+		ac.Category = NetworkOptionBack
+		return
+	}
+
 	// Сохраняем выбранный индекс и устанавливаем категорию
 	selected := menuTask.GetSelectedIndex()
 	ac.LastNetworkIndex = selected

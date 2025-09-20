@@ -15,7 +15,7 @@ import (
 
 func main() {
 
-	LANGUAGE := "en"
+	LANGUAGE := "ru"
 	DEBUG := false
 	VERSION := "1.0.0"
 	APPNAME := "terem"
